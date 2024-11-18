@@ -19,8 +19,6 @@ modal = businessCapital
 stock = logisticsStock
 
 
-
-
 #Mathematical function 
 def calculate_profit():
     profitLoss = selling_price * total_item - modal
@@ -43,3 +41,4 @@ def assumption():
 selling_price = int(input("Harga jual per barang: "))
 total_item = int(input("Jumlah barang terjual: "))
 
+print('Hello World')
