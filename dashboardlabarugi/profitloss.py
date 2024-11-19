@@ -18,9 +18,6 @@ entry_modal.pack(pady=5)
 modal = businessCapital
 stock = logisticsStock
 
-
-
-
 #Mathematical function 
 def calculate_profit():
     profitLoss = selling_price * total_item - modal
@@ -37,7 +34,6 @@ def assumption():
     else:
         return "Mohon maaf, terjadi kesalahan dalam perhitungan!"
     
-
 
 #Input from accountant
 selling_price = int(input("Harga jual per barang: "))
