@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox
 
-#Input from owner and logistics
+
 
 
 #Mathematical function 
