@@ -1,10 +1,8 @@
 import tkinter as tk
-from owner import businessCapital
-from logistics import logisticsStock
+from tkinter import messagebox
 
 #Input from owner and logistics
-modal = businessCapital
-stock = logisticsStock
+
 
 #Mathematical function 
 def calculate_profit():
@@ -12,16 +10,22 @@ def calculate_profit():
     harga_jual_barang = int(entry_hbj.get())
     modal = int(entry_modal.get())
 
-#Assumption
-def assumption():
-    if calculate_profit > 0:
-        return "Keuntungan yang didapat sebanyak ", calculate_profit
-    elif calculate_profit < 0:
-        return "Rugi yang didapat sebanyak ", calculate_profit
-    elif calculate_profit == 0:
-        return "Tidak mengalami keuntungan maupun kerugian!"
-    else:
-        return "Mohon maaf, terjadi kesalahan dalam perhitungan!"
+    profit = jumlah_barang_terjual * harga_jual_barang - modal
+    
+
+    def assumption():
+        if calculate_profit > 0:
+            label_hasil.config(text=f"Keuntugan yang didapat: {abs(profit)}")
+        elif calculate_profit < 0:
+            label_hasil.config(text=f"Kerugian  yang didapat: {abs(profit)}")
+        elif calculate_profit == 0:
+            label_hasil.config(text="Tidak mengalami keuntungan ataupun kerugian!")
+        else:
+            return "Mohon maaf, terjadi kesalahan dalam perhitungan!"
+
+
+
+
     
 
 #Window optimization
@@ -44,3 +48,11 @@ modal = tk.Label(root, text="Modal:")
 modal.pack(pady=5)
 entry_modal = tk.Entry(root)
 entry_modal.pack(pady=5)
+
+calculate_button = tk.Button(root, text="Click me!", command=calculate_profit)
+calculate_button.pack(pady=10)
+
+label_hasil = tk.Label(root, text="Keuntungan yang didapat sebanyak: -", font=("Arial", 10))
+label_hasil.pack(pady=5)
+
+root.mainloop()
