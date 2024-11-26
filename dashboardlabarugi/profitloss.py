@@ -1,8 +1,31 @@
 import tkinter as tk
 from tkinter import messagebox
 import json
+import os
 
+#Lokasi database berada
+json_path = 'laba_rugi.json'
 
+#load database yang ada
+def load_calculations():
+        if os.path.exists(json_path):
+            with open(json_path, 'r') as file:
+                  content = file.read().strip()
+                  if not content:
+                        return[]
+                  try:
+                        return json.loads(content)
+                  except json.JSONDecodeError:
+                        messagebox.showerror("JSON ERROR", "File terkorup atau invalid")
+                        return[]
+        return []
+                  
+                
+      
+#Ngesave database
+def save_calculations(calculations):
+      with open(json_path, 'w') as file:
+            json.dump(calculations, file, indent=4)
 
 
 #Mathematical function 
@@ -12,11 +35,24 @@ def calculate_profit():
     modal = int(entry_modal.get())
 
     profit = jumlah_barang_terjual * harga_jual_barang - modal
-    return profit
+    return profit, jumlah_barang_terjual, harga_jual_barang, modal 
     
 
 def assumption():
-    profit = calculate_profit()
+    profit, jumlah_barang_terjual, harga_jual_barang, modal = calculate_profit()
+
+        #Simpan data 
+
+    calculations = load_calculations()
+    calculations.append({
+          'jumlah_barang_terjual': jumlah_barang_terjual,
+          'harga_jual_barang': harga_jual_barang,
+          'modal': modal,
+          'profit': profit
+    })
+
+    #Save updated data
+    save_calculations(calculations)
     if profit > 0:
             label_hasil.config(text=f"Keuntugan yang didapat: {abs(profit)}")
     elif profit < 0:
@@ -25,6 +61,7 @@ def assumption():
             label_hasil.config(text="Tidak mengalami keuntungan ataupun kerugian!")
     else:
         return "Mohon maaf, terjadi kesalahan dalam perhitungan!"
+
 
 
 #Window optimization
