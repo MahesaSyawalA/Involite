@@ -10,6 +10,7 @@ data = {
 
 dataBarangMasuk = [
     {
+        "idbrg" :"1",
         "nama": "Beras",
         "harga_beli": 12000,
         "harga_jual": 15000,
@@ -17,6 +18,7 @@ dataBarangMasuk = [
         "tanggal_masuk": "2024-11-01"
     },
     {
+        "idbrg" :"2",
         "nama": "Minyak Goreng",
         "harga_beli": 14000,
         "harga_jual": 17000,
@@ -24,6 +26,7 @@ dataBarangMasuk = [
         "tanggal_masuk": "2024-11-05"
     },
     {
+        "idbrg" :"3",
         "nama": "Gula Pasir",
         "harga_beli": 13000,
         "harga_jual": 16500,
@@ -31,6 +34,7 @@ dataBarangMasuk = [
         "tanggal_masuk": "2024-11-10"
     },
     {
+        "idbrg" :"4",
         "nama": "Kopi Bubuk",
         "harga_beli": 25000,
         "harga_jual": 30000,
@@ -38,6 +42,7 @@ dataBarangMasuk = [
         "tanggal_masuk": "2024-11-15"
     },
     {
+        "idbrg" :"5",
         "nama": "Teh Celup",
         "harga_beli": 8000,
         "harga_jual": 10000,
