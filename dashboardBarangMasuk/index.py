@@ -1,6 +1,7 @@
 import json
 from datetime import datetime
-from tabulate import tabulate
+import uuid
+from tkinter import Tk, Label, Entry, Button, messagebox, ttk
 
 # Path ke file JSON
 file_path = "./data_barang.json"
@@ -11,7 +12,6 @@ def baca_data():
         with open(file_path, "r") as file:
             return json.load(file)
     except (FileNotFoundError, json.JSONDecodeError):
-        # Jika file tidak ditemukan atau kosong, kembalikan list kosong
         return []
 
 # Fungsi untuk menulis data ke file JSON
@@ -20,113 +20,174 @@ def tulis_data(data):
         json.dump(data, file, indent=4)
 
 # Fungsi untuk menambahkan barang masuk
-def InputBarangMasuk():
-    nama = str(input("Masukkan nama barang: "))
-    harga_beli_barang = int(input("Masukkan harga beli barang: "))
-    harga_jual_barang = int(input("Masukkan harga jual barang: "))
-    stok_barang = int(input("Masukkan jumlah stok barang: "))
+def tambah_barang():
+    nama = entry_nama.get()
+    harga_beli = entry_harga_beli.get()
+    harga_jual = entry_harga_jual.get()
+    stok = entry_stok.get()
 
-    # Ambil tanggal saat ini
+    if not (nama and harga_beli and harga_jual and stok):
+        messagebox.showerror("Input Error", "Semua kolom harus diisi!")
+        return
+
+    try:
+        harga_beli = int(harga_beli)
+        harga_jual = int(harga_jual)
+        stok = int(stok)
+    except ValueError:
+        messagebox.showerror("Input Error", "Harga dan stok harus berupa angka!")
+        return
+
     nowDate = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
-    # Membuat data barang baru
-    dataBarangMasuk = {
-        "idbrg": len(baca_data()) + 1,  # ID unik berdasarkan jumlah data saat ini
+    dataBarang = {
+        "idbrg": str(uuid.uuid4()),
         "nama": nama,
-        "harga_beli": harga_beli_barang,
-        "harga_jual": harga_jual_barang,
-        "stok": stok_barang,
+        "harga_beli": harga_beli,
+        "harga_jual": harga_jual,
+        "stok": stok,
         "tanggal_masuk": nowDate
     }
 
-    # Membaca data yang ada dan menambahkan data baru
     data = baca_data()
-    data.append(dataBarangMasuk)
-
-    # Menulis data kembali ke file JSON
+    data.append(dataBarang)
     tulis_data(data)
-    print("Data berhasil ditambahkan!")
 
-# Fungsi untuk memperbarui data barang berdasarkan idbrg
-def UpdateBarang():
-    idbrg = int(input("Masukkan ID Barang yang ingin diperbarui: "))
-    data = baca_data()
-    barang = next((item for item in data if item["idbrg"] == idbrg), None)
-    if barang:
-        print(f"Data Barang {idbrg}:")
-        print(f"Nama: {barang['nama']}")
-        print(f"Harga Beli: {barang['harga_beli']}")
-        print(f"Harga Jual: {barang['harga_jual']}")
-        print(f"Stok: {barang['stok']}")
-        print(f"Tanggal Masuk: {barang['tanggal_masuk']}")
-        print("\nMasukkan data baru (biarkan kosong untuk tidak mengubah):")
-        nama = input(f"Nama ({barang['nama']}): ") or barang['nama']
-        harga_beli_barang = input(f"Harga Beli ({barang['harga_beli']}): ")
-        harga_beli_barang = int(harga_beli_barang) if harga_beli_barang else barang['harga_beli']
-        harga_jual_barang = input(f"Harga Jual ({barang['harga_jual']}): ")
-        harga_jual_barang = int(harga_jual_barang) if harga_jual_barang else barang['harga_jual']
-        stok_barang = input(f"Stok ({barang['stok']}): ")
-        stok_barang = int(stok_barang) if stok_barang else barang['stok']
-        # Update data barang
-        barang.update({
-            "nama": nama,
-            "harga_beli": harga_beli_barang,
-            "harga_jual": harga_jual_barang,
-            "stok": stok_barang,
-            "tanggal_masuk": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        })
-        # Menulis data kembali ke file JSON
-        tulis_data(data)
-        print("Data berhasil diperbarui!")
-    else:
-        print("ID Barang tidak ditemukan.")
+    messagebox.showinfo("Berhasil", "Data barang berhasil ditambahkan!")
+    reset_form()
+    tampilkan_data()
 
-# Fungsi untuk menghapus data barang berdasarkan idbrg
-def DeleteBarang():
-    idbrg = int(input("Masukkan ID Barang yang ingin dihapus: "))
-    data = baca_data()
-    barang = next((item for item in data if item["idbrg"] == idbrg), None)
-    if barang:
-        data.remove(barang)
-        # Menulis data kembali ke file JSON
-        tulis_data(data)
-        print("Data berhasil dihapus!")
-    else:
-        print("ID Barang tidak ditemukan.")
-
-# Fungsi untuk menampilkan data dalam bentuk tabel
+# Fungsi untuk menampilkan data ke dalam tabel
 def tampilkan_data():
+    for row in tree.get_children():
+        tree.delete(row)
     data = baca_data()
-    if data:
-        headers = ["ID Barang", "Nama", "Harga Beli", "Harga Jual", "Stok", "Tanggal Masuk"]
-        tabel_data = [
-            [d["idbrg"], d["nama"], d["harga_beli"], d["harga_jual"], d["stok"], d["tanggal_masuk"]]
-            for d in data
-        ]
-        print(tabulate(tabel_data, headers=headers, tablefmt="grid"))
-    else:
-        print("Tidak ada data barang yang tersedia.")
+    for barang in data:
+        tree.insert("", "end", values=(barang["idbrg"], barang["nama"], barang["harga_beli"],
+                                       barang["harga_jual"], barang["stok"], barang["tanggal_masuk"]))
 
-# Menampilkan data yang sudah ada
-print("Data Barang:")
+# Fungsi untuk menghapus data berdasarkan ID
+def hapus_barang():
+    selected_item = tree.selection()
+    if not selected_item:
+        messagebox.showerror("Error", "Pilih data yang ingin dihapus!")
+        return
+
+    idbrg = tree.item(selected_item, "values")[0]
+    data = baca_data()
+    data = [barang for barang in data if barang["idbrg"] != idbrg]
+    tulis_data(data)
+
+    messagebox.showinfo("Berhasil", "Data barang berhasil dihapus!")
+    tampilkan_data()
+
+# Fungsi untuk mengisi form dengan data yang dipilih
+def pilih_barang():
+    selected_item = tree.selection()
+    if not selected_item:
+        messagebox.showerror("Error", "Pilih data yang ingin diupdate!")
+        return
+
+    barang = tree.item(selected_item, "values")
+    entry_nama.delete(0, "end")
+    entry_harga_beli.delete(0, "end")
+    entry_harga_jual.delete(0, "end")
+    entry_stok.delete(0, "end")
+
+    entry_nama.insert(0, barang[1])
+    entry_harga_beli.insert(0, barang[2])
+    entry_harga_jual.insert(0, barang[3])
+    entry_stok.insert(0, barang[4])
+
+    global selected_idbrg
+    selected_idbrg = barang[0]  # Simpan ID barang yang dipilih
+
+# Fungsi untuk memperbarui data barang
+def update_barang():
+    if not selected_idbrg:
+        messagebox.showerror("Error", "Pilih data yang ingin diupdate!")
+        return
+
+    nama = entry_nama.get()
+    harga_beli = entry_harga_beli.get()
+    harga_jual = entry_harga_jual.get()
+    stok = entry_stok.get()
+
+    if not (nama and harga_beli and harga_jual and stok):
+        messagebox.showerror("Input Error", "Semua kolom harus diisi!")
+        return
+
+    try:
+        harga_beli = int(harga_beli)
+        harga_jual = int(harga_jual)
+        stok = int(stok)
+    except ValueError:
+        messagebox.showerror("Input Error", "Harga dan stok harus berupa angka!")
+        return
+
+    data = baca_data()
+    for barang in data:
+        if barang["idbrg"] == selected_idbrg:
+            barang["nama"] = nama
+            barang["harga_beli"] = harga_beli
+            barang["harga_jual"] = harga_jual
+            barang["stok"] = stok
+            break
+
+    tulis_data(data)
+    messagebox.showinfo("Berhasil", "Data barang berhasil diperbarui!")
+    reset_form()
+    tampilkan_data()
+
+# Fungsi untuk mereset form input
+def reset_form():
+    entry_nama.delete(0, "end")
+    entry_harga_beli.delete(0, "end")
+    entry_harga_jual.delete(0, "end")
+    entry_stok.delete(0, "end")
+    global selected_idbrg
+    selected_idbrg = None  # Reset ID barang yang dipilih
+
+# GUI Utama
+root = Tk()
+root.title("Manajemen Data Barang")
+root.geometry("800x600")
+
+selected_idbrg = None  # Variabel untuk menyimpan ID barang yang dipilih
+
+# Form Input
+Label(root, text="Nama Barang:").grid(row=0, column=0, padx=10, pady=10, sticky="w")
+entry_nama = Entry(root, width=30)
+entry_nama.grid(row=0, column=1, padx=10, pady=10)
+
+Label(root, text="Harga Beli:").grid(row=1, column=0, padx=10, pady=10, sticky="w")
+entry_harga_beli = Entry(root, width=30)
+entry_harga_beli.grid(row=1, column=1, padx=10, pady=10)
+
+Label(root, text="Harga Jual:").grid(row=2, column=0, padx=10, pady=10, sticky="w")
+entry_harga_jual = Entry(root, width=30)
+entry_harga_jual.grid(row=2, column=1, padx=10, pady=10)
+
+Label(root, text="Stok:").grid(row=3, column=0, padx=10, pady=10, sticky="w")
+entry_stok = Entry(root, width=30)
+entry_stok.grid(row=3, column=1, padx=10, pady=10)
+
+Button(root, text="Tambah Barang", command=tambah_barang).grid(row=4, column=0, pady=10)
+Button(root, text="Update Barang", command=update_barang).grid(row=4, column=1, pady=10)
+Button(root, text="Hapus Barang", command=hapus_barang).grid(row=4, column=2, pady=10)
+Button(root, text="Pilih Barang", command=pilih_barang).grid(row=4, column=3, pady=10)
+
+# Tabel Data
+columns = ("ID Barang", "Nama", "Harga Beli", "Harga Jual", "Stok", "Tanggal Masuk")
+tree = ttk.Treeview(root, columns=columns, show="headings", height=15)
+
+for col in columns:
+    tree.heading(col, text=col)
+    tree.column(col, width=120)
+
+tree.grid(row=5, column=0, columnspan=4, padx=10, pady=10)
+
+# Menampilkan data awal
 tampilkan_data()
 
-# Menjalankan fungsi berdasarkan input pengguna
-while True:
-    action = input("\nPilih aksi:\n1. Tambah Data\n2. Update Data\n3. Hapus Data\n4. Keluar\nPilihan: ")
-    if action == "1":
-        InputBarangMasuk()
-        print("\nData Barang Terbaru:")
-        tampilkan_data()
-    elif action == "2":
-        UpdateBarang()
-        print("\nData Barang Terbaru:")
-        tampilkan_data()
-    elif action == "3":
-        DeleteBarang()
-        print("\nData Barang Terbaru:")
-        tampilkan_data()
-    elif action == "4":
-        break
-    else:
-        print("Pilihan tidak valid.")
+# Menjalankan GUI
+root.mainloop()
