@@ -21,6 +21,7 @@ def tulis_data(data):
 
 # Fungsi untuk menambahkan barang masuk
 def tambah_barang():
+    global selected_idbrg  # Menggunakan variabel global untuk ID yang dipilih
     nama = entry_nama.get()
     harga_beli = entry_harga_beli.get()
     harga_jual = entry_harga_jual.get()
@@ -38,9 +39,13 @@ def tambah_barang():
         messagebox.showerror("Input Error", "Harga dan stok harus berupa angka!")
         return
 
+    if selected_idbrg:  # Jika sedang dalam mode update (data lama dipilih)
+        messagebox.showerror("Error", "Tidak dapat menambah data saat data dipilih untuk update!\nKlik Reset terlebih dahulu.")
+        return
+
     nowDate = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     dataBarang = {
-        "idbrg": str(uuid.uuid4()),
+        "idbrg": str(uuid.uuid4()),  # ID baru untuk data baru
         "nama": nama,
         "harga_beli": harga_beli,
         "harga_jual": harga_jual,
@@ -103,6 +108,7 @@ def pilih_barang():
 
 # Fungsi untuk memperbarui data barang
 def update_barang():
+    global selected_idbrg  # Menggunakan variabel global untuk ID yang dipilih
     if not selected_idbrg:
         messagebox.showerror("Error", "Pilih data yang ingin diupdate!")
         return
@@ -145,7 +151,7 @@ def reset_form():
     entry_harga_jual.delete(0, "end")
     entry_stok.delete(0, "end")
     global selected_idbrg
-    selected_idbrg = None  # Reset ID barang yang dipilih
+    selected_idbrg = None
 
 # GUI Utama
 root = Tk()
@@ -171,10 +177,14 @@ Label(root, text="Stok:").grid(row=3, column=0, padx=10, pady=10, sticky="w")
 entry_stok = Entry(root, width=30)
 entry_stok.grid(row=3, column=1, padx=10, pady=10)
 
+# Tombol-tombol aksi
 Button(root, text="Tambah Barang", command=tambah_barang).grid(row=4, column=0, pady=10)
 Button(root, text="Update Barang", command=update_barang).grid(row=4, column=1, pady=10)
 Button(root, text="Hapus Barang", command=hapus_barang).grid(row=4, column=2, pady=10)
 Button(root, text="Pilih Barang", command=pilih_barang).grid(row=4, column=3, pady=10)
+
+# Tambahkan tombol Reset Data
+Button(root, text="Reset Data", command=reset_form).grid(row=4, column=4, pady=10)
 
 # Tabel Data
 columns = ("ID Barang", "Nama", "Harga Beli", "Harga Jual", "Stok", "Tanggal Masuk")
@@ -184,7 +194,7 @@ for col in columns:
     tree.heading(col, text=col)
     tree.column(col, width=120)
 
-tree.grid(row=5, column=0, columnspan=4, padx=10, pady=10)
+tree.grid(row=5, column=0, columnspan=5, padx=10, pady=10)
 
 # Menampilkan data awal
 tampilkan_data()
