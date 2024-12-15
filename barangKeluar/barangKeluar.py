@@ -13,7 +13,7 @@ def baca_data():
             return json.load(file)
     except (FileNotFoundError, json.JSONDecodeError):
         return []
-    
+#Fungsi untuk menulis data JSON    
 def tulis_data(data):
     with open(file_path, "w") as file:
         json.dump(data, file, indent=4)
