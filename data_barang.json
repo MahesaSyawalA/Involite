@@ -1,0 +1,18 @@
+[
+    {
+        "idbrg": "df3b4724-389b-4d9b-a324-5349fa9f5d88",
+        "nama": "A",
+        "harga_beli": 100,
+        "harga_jual": 100,
+        "stok": 412,
+        "tanggal_masuk": "2024-12-15 05:55:18"
+    },
+    {
+        "idbrg": "a4b22b9c-825b-4af4-a3b2-81a87b0bd4c4",
+        "nama": "B",
+        "harga_beli": 100,
+        "harga_jual": 100,
+        "stok": 597,
+        "tanggal_masuk": "2024-12-15 06:22:21"
+    }
+]
