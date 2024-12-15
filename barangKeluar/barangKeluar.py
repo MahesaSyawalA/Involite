@@ -27,8 +27,7 @@ def tampilkan_data():
         tree.insert("", "end", values =(item["idbrg"], item["nama"], item["harga_beli"], 
                                         item["harga_jual"],item["stok"],item["tanggal_masuk"]))
 
-#Fungsi untuk mengisi form dengan data yang dipilih
-
+#Fungsi search
 def search(keyword):
     for row in tree.get_children():
         tree.delete(row)
