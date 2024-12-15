@@ -28,13 +28,6 @@ def tampilkan_data():
                                         item["harga_jual"],item["stok"],item["tanggal_masuk"]))
 
 #Fungsi untuk mengisi form dengan data yang dipilih
-def pilih_barang():
-    selected_item = tree.selection()
-    if not selected_item:
-        messagebox.showerror("Error", "Pilih data!")
-        return
-
-    barang = tree.item(selected_item, "values")
 
 def search(keyword):
     for row in tree.get_children():
