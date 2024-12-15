@@ -20,11 +20,19 @@
         "nama": "Dodol Garut",
         "harga_beli": 120,
         "harga_jual": 321,
-        "stok": 289,
+        "stok": 276,
         "tanggal_masuk": "2024-12-15 14:47:56"
     },
     {
-        "waktu": "2024-12-15 21: 34: 40",
+        "waktu": "2024-12-15 22: 11: 03",
+        "idbrg": "704993b9-aefa-43b3-b274-ff426f635233",
+        "nama": "Dodol Garut",
+        "harga_satuan": 321,
+        "jumlah": 12,
+        "total_harga": 3852
+    },
+    {
+        "waktu": "2024-12-15 22: 11: 53",
         "idbrg": "704993b9-aefa-43b3-b274-ff426f635233",
         "nama": "Dodol Garut",
         "harga_satuan": 321,
@@ -32,95 +40,7 @@
         "total_harga": 321
     },
     {
-        "waktu": "2024-12-15 21: 34: 40",
-        "idbrg": "704993b9-aefa-43b3-b274-ff426f635233",
-        "nama": "Dodol Garut",
-        "harga_satuan": 321,
-        "jumlah": 1,
-        "total_harga": 321
-    },
-    {
-        "waktu": "2024-12-15 21: 34: 40",
-        "idbrg": "704993b9-aefa-43b3-b274-ff426f635233",
-        "nama": "Dodol Garut",
-        "harga_satuan": 321,
-        "jumlah": 11,
-        "total_harga": 3531
-    },
-    {
-        "waktu": "2024-12-15 21: 34: 40",
-        "idbrg": "704993b9-aefa-43b3-b274-ff426f635233",
-        "nama": "Dodol Garut",
-        "harga_satuan": 321,
-        "jumlah": 1,
-        "total_harga": 321
-    },
-    {
-        "waktu": "2024-12-15 21: 34: 40",
-        "idbrg": "704993b9-aefa-43b3-b274-ff426f635233",
-        "nama": "Dodol Garut",
-        "harga_satuan": 321,
-        "jumlah": 1,
-        "total_harga": 321
-    },
-    {
-        "waktu": "2024-12-15 21: 34: 40",
-        "idbrg": "704993b9-aefa-43b3-b274-ff426f635233",
-        "nama": "Dodol Garut",
-        "harga_satuan": 321,
-        "jumlah": 1,
-        "total_harga": 321
-    },
-    {
-        "waktu": "2024-12-15 21: 34: 40",
-        "idbrg": "704993b9-aefa-43b3-b274-ff426f635233",
-        "nama": "Dodol Garut",
-        "harga_satuan": 321,
-        "jumlah": 1,
-        "total_harga": 321
-    },
-    {
-        "waktu": "2024-12-15 21: 34: 40",
-        "idbrg": "704993b9-aefa-43b3-b274-ff426f635233",
-        "nama": "Dodol Garut",
-        "harga_satuan": 321,
-        "jumlah": 1,
-        "total_harga": 321
-    },
-    {
-        "waktu": "2024-12-15 21: 34: 40",
-        "idbrg": "704993b9-aefa-43b3-b274-ff426f635233",
-        "nama": "Dodol Garut",
-        "harga_satuan": 321,
-        "jumlah": 1,
-        "total_harga": 321
-    },
-    {
-        "waktu": "2024-12-15 21: 34: 40",
-        "idbrg": "704993b9-aefa-43b3-b274-ff426f635233",
-        "nama": "Dodol Garut",
-        "harga_satuan": 321,
-        "jumlah": 1,
-        "total_harga": 321
-    },
-    {
-        "waktu": "2024-12-15 21: 34: 40",
-        "idbrg": "704993b9-aefa-43b3-b274-ff426f635233",
-        "nama": "Dodol Garut",
-        "harga_satuan": 321,
-        "jumlah": 1,
-        "total_harga": 321
-    },
-    {
-        "waktu": "2024-12-15 21: 34: 40",
-        "idbrg": "704993b9-aefa-43b3-b274-ff426f635233",
-        "nama": "Dodol Garut",
-        "harga_satuan": 321,
-        "jumlah": 1,
-        "total_harga": 321
-    },
-    {
-        "waktu": "2024-12-15 21: 34: 40",
+        "waktu": "2024-12-15 22: 12: 03",
         "idbrg": "704993b9-aefa-43b3-b274-ff426f635233",
         "nama": "Dodol Garut",
         "harga_satuan": 321,

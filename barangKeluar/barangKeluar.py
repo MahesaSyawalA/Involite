@@ -72,7 +72,7 @@ def tambah_catatan():
 def simpan_log(log):
     def baca_logs():
         try:
-            with open(file_path, "r") as file:
+            with open(log_file_path, "r") as file:
                 return json.load(file)
         except Exception as e:
             messagebox.showerror("Error", f"Gagal menyimpan log: {e}")
