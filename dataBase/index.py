@@ -1,67 +1,36 @@
 import json
 
-# Membuat dummy database
+# Membuat dummy database tanpa 'usaha' dan 'idUsaha'
 data = {
     "users": [
-        {"id": 1, "name": "Alice", "email": "alice@example.com"},
-        {"id": 2, "name": "Bob", "email": "bob@example.com"}
-    ]
+        {"idUser": "1", "nama": "Alice", "username": "alice123", "password": "password123", "createdAt": "2024-11-01"},
+        {"idUser": "2", "nama": "Bob", "username": "bob456", "password": "password456", "createdAt": "2024-11-02"}
+    ],
+    "barang": [
+        {"idBarang": "1", "namaBarang": "Beras", "stok": 100, "kategori": "Sembako", "hargaSatuan": 15000, "createdAt": "2024-11-01"},
+        {"idBarang": "2", "namaBarang": "Minyak Goreng", "stok": 50, "kategori": "Sembako", "hargaSatuan": 17000, "createdAt": "2024-11-01"}
+    ],
+    "barangMasuk": [
+        {"idBarangMasuk": "1", "idBarang": "1", "jumlah": 50, "hargaSatuan": 12000, "totalModal": 600000, "tanggalMasuk": "2024-11-01", "description": "Stok awal"},
+        {"idBarangMasuk": "2", "idBarang": "2", "jumlah": 30, "hargaSatuan": 14000, "totalModal": 420000, "tanggalMasuk": "2024-11-02", "description": "Pembelian baru"}
+    ],
+    "barangKeluar": [
+        {"idBarangKeluar": "1", "idBarang": "1", "jumlah": 10, "hargaSatuan": 15000, "totalPenjualan": 150000, "tanggalKeluar": "2024-11-03", "description": "Penjualan ke pelanggan"},
+        {"idBarangKeluar": "2", "idBarang": "2", "jumlah": 5, "hargaSatuan": 17000, "totalPenjualan": 85000, "tanggalKeluar": "2024-11-04", "description": "Penjualan ke pelanggan"}
+    ],
+    "profitLossReport": [
+        {"idReport": "1", "tanggalAwal": "2024-11-01", "tanggalAkhir": "2024-11-30", "totalPemasukan": 235000, "totalPengeluaran": 1020000, "totalLabaRugi": -785000, "createdAt": "2024-12-01"}
+    ],
+    'sessions': []
 }
-
-dataBarangMasuk = [
-    {
-        "idbrg" :"1",
-        "nama": "Beras",
-        "harga_beli": 12000,
-        "harga_jual": 15000,
-        "stok": 50,
-        "tanggal_masuk": "2024-11-01"
-    },
-    {
-        "idbrg" :"2",
-        "nama": "Minyak Goreng",
-        "harga_beli": 14000,
-        "harga_jual": 17000,
-        "stok": 30,
-        "tanggal_masuk": "2024-11-05"
-    },
-    {
-        "idbrg" :"3",
-        "nama": "Gula Pasir",
-        "harga_beli": 13000,
-        "harga_jual": 16500,
-        "stok": 40,
-        "tanggal_masuk": "2024-11-10"
-    },
-    {
-        "idbrg" :"4",
-        "nama": "Kopi Bubuk",
-        "harga_beli": 25000,
-        "harga_jual": 30000,
-        "stok": 20,
-        "tanggal_masuk": "2024-11-15"
-    },
-    {
-        "idbrg" :"5",
-        "nama": "Teh Celup",
-        "harga_beli": 8000,
-        "harga_jual": 10000,
-        "stok": 60,
-        "tanggal_masuk": "2024-11-20"
-    }
-]
-
-
 
 # Menyimpan data ke file JSON
 with open("database.json", "w") as file:
-    json.dump(data, file)
+    json.dump(data, file, indent=4)
 
 # Membaca data dari file JSON
 with open("database.json", "r") as file:
     loaded_data = json.load(file)
 
-with open("data_barang.json", "w") as file:
-    json.dump(dataBarangMasuk, file, indent=4)
-
-print(loaded_data)
+print("Data berhasil disimpan dan dimuat:")
+print(json.dumps(loaded_data, indent=4))
