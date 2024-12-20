@@ -1,10 +1,9 @@
 #registrasi akun 
 
+nama_pengguna = input("masukan nama :")
 email = input("masukan email :")
 password_email = input("masukan password :")
-no_telepon = int(input("masukan nomor telepon :"))
-alamat = input("masukan alamat :")
-print(f'{email}\n {password_email}\n {no_telepon}\n {alamat}')
+print(f'{nama_pengguna}\n {email}\n {password_email}\n')
 
 #login berdasarkan registrasi akun
 username_db = email
