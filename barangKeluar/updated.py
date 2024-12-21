@@ -38,7 +38,7 @@ def tampilkan_barang(database, type='barang'):
                 barang["namaBarang"],
                 barang["stok"],
                 barang["kategori"],
-                f"Rp{barang['hargaSatuan']}",
+                f"Rp{barang['hargaJual']}",
                 barang["createdAt"],
                 barang_keluar_descriptions
             ])
@@ -77,7 +77,7 @@ def create_barang_keluar(database):
     print("\n==== Tambah Barang Keluar ====")
 
     # Tampilkan daftar barang
-    tampilkan_barang(database,'barangKeluar')
+    tampilkan_barang(database,'barang')
 
     # Input data barang keluar
     id_barang = input("Masukkan ID Barang: ")
@@ -92,7 +92,7 @@ def create_barang_keluar(database):
         print("\nJumlah barang keluar melebihi stok yang tersedia!\n")
         return
 
-    harga_satuan = barang["hargaSatuan"]
+    harga_satuan = barang["hargaJual"]
     total_penjualan = jumlah * harga_satuan
     tanggal_keluar = input("Masukkan tanggal keluar (YYYY-MM-DD): ")
     description = input("Masukkan deskripsi: ")
