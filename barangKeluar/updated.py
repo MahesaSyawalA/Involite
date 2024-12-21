@@ -18,7 +18,7 @@ def create_barang_keluar(database):
     print("\n==== Tambah Barang Keluar ====")
 
     # Tampilkan daftar barang
-    read_barang_keluar(database,'barang')
+    show_database(database,'barang')
 
     # Input data barang keluar
     id_barang = input("Masukkan ID Barang: ")
@@ -57,7 +57,7 @@ def create_barang_keluar(database):
 
     print("\nBarang keluar berhasil ditambahkan!\n")
 
-def read_barang_keluar(database, type='tipe'):
+def show_database(database, type='tipe'):
     if type == 'barangKeluar':
         for barang_keluar in database["barangKeluar"]:
             barang = next((b for b in database["barang"] if b["idBarang"] == barang_keluar["idBarang"]), {})
@@ -97,7 +97,7 @@ def update_barang_keluar(database):
         print("\nTidak ada data barang keluar yang tersedia.\n")
         return
 
-    read_barang_keluar(database, 'barangKeluar')
+    show_database(database, 'barangKeluar')
 
     # Pilih data yang akan diedit
     id_barang_keluar = input("Masukkan ID Barang Keluar yang ingin diedit: ")
@@ -108,7 +108,7 @@ def update_barang_keluar(database):
         return
 
     # Tampilkan daftar barang (calling the previous function to show barang)
-    read_barang_keluar(database, type='barang')
+    show_database(database, type='barang')
 
     # Edit data barang keluar
     id_barang = input(f"Masukkan ID Barang [{barang_keluar['idBarang']}]: ") or barang_keluar["idBarang"]
@@ -147,6 +147,7 @@ def update_barang_keluar(database):
 
 def delete_barang_keluar(database):
     print("==== Hapus Barang Keluar ====")
+    show_database(database, 'barangKeluar')
     id_barang_keluar = input("Masukkan ID Barang Keluar yang ingin dihapus: ")
 
     # Cari barang keluar
@@ -184,7 +185,7 @@ def main():
             save_data(file_path, database)
         elif pilihan == "2":
             print("==== Data Barang Keluar ====")
-            read_barang_keluar(database, 'barangKeluar')
+            show_database(database, 'barangKeluar')
         elif pilihan == "3":
             update_barang_keluar(database)
             save_data(file_path, database)
