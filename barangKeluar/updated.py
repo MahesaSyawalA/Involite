@@ -77,7 +77,7 @@ def create_barang_keluar(database):
     print("\n==== Tambah Barang Keluar ====")
 
     # Tampilkan daftar barang
-    tampilkan_barang(database)
+    tampilkan_barang(database,'barangKeluar')
 
     # Input data barang keluar
     id_barang = input("Masukkan ID Barang: ")

@@ -21,8 +21,15 @@ data = {
     "profitLossReport": [
         {"idReport": "1", "tanggalAwal": "2024-11-01", "tanggalAkhir": "2024-11-30", "totalPemasukan": 235000, "totalPengeluaran": 1020000, "totalLabaRugi": -785000, "createdAt": "2024-12-01"}
     ],
-    'sessions': []
+    'sessions': [
+        {"namaUser":"zahra"}
+    ]
 }
+
+# Modifikasi barang: ubah hargaSatuan ke hargaModal, tambahkan hargaJual
+for barang in data['barang']:
+    barang['hargaModal'] = barang.pop('hargaSatuan')  # Ubah hargaSatuan menjadi hargaModal
+    barang['hargaJual'] = barang['hargaModal'] * 1.2  # Tambahkan hargaJual dengan markup 20%
 
 # Menyimpan data ke file JSON
 with open("database.json", "w") as file:
@@ -32,5 +39,5 @@ with open("database.json", "w") as file:
 with open("database.json", "r") as file:
     loaded_data = json.load(file)
 
-print("Data berhasil disimpan dan dimuat:")
+print("Data berhasil dimodifikasi, disimpan, dan dimuat:")
 print(json.dumps(loaded_data, indent=4))
