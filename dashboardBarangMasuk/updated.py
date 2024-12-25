@@ -34,23 +34,22 @@ def display_barang_masuk(data):
 
     barang_dict = {item["idBarang"]: item for item in data["barang"]}
 
-    table = []
+    print("")
     for entry in data["barangMasuk"]:
         id_barang = entry["idBarang"]
         nama_barang = barang_dict.get(id_barang, {}).get("namaBarang", "Tidak Diketahui")
-        
-        table.append([
-            entry["idBarangMasuk"],
-            nama_barang,
-            entry["jumlah"],
-            entry["hargaSatuan"],
-            entry["totalModal"],
-            entry["tanggalMasuk"],
-            entry["description"]
-        ])
 
-    headers = ["ID Barang Masuk", "Nama Barang", "Jumlah", "Harga Satuan", "Total Modal", "Tanggal Masuk", "Deskripsi"]
-    print(tabulate(table, headers, tablefmt="grid"))
+        paragraph = (
+            f"ID Barang Masuk: {entry['idBarangMasuk']}\n"
+            f"Nama Barang: {nama_barang}\n"
+            f"Jumlah: {entry['jumlah']}\n"
+            f"Harga Satuan: {entry['hargaSatuan']}\n"
+            f"Total Modal: {entry['totalModal']}\n"
+            f"Tanggal Masuk: {entry['tanggalMasuk']}\n"
+            f"Deskripsi: {entry['description']}\n"
+            f"{'-' * 40}"
+        )
+        print(paragraph)
 
 def validate_input(prompt, pattern, cast_type=str, default=None):
     """Validate user input against a regex pattern."""
@@ -64,15 +63,24 @@ def validate_input(prompt, pattern, cast_type=str, default=None):
 
 def choose_barang(data):
     """Allow user to choose a Barang from the available data."""
-    print("\nDaftar Barang:")
-    table = [[item["idBarang"], item["namaBarang"]] for item in data["barang"]]
-    print(tabulate(table, headers=["ID Barang", "Nama Barang"], tablefmt="grid"))
+    if not data or "barang" not in data:
+        print("Data tidak valid atau tidak lengkap.")
+        return
+    print('')
+    for item in data["barang"]:
+        print(
+            f"ID Barang: {item['idBarang']}\n"
+            f"Nama Barang: {item['namaBarang']}\n"
+            f"{'-' * 40}"
+        )
 
     while True:
         id_barang = input("Masukkan ID Barang yang dipilih: ")
         if any(item["idBarang"] == id_barang for item in data["barang"]):
             return id_barang
         print("ID Barang tidak valid. Silakan pilih dari daftar.")
+
+
 
 def add_barang_masuk(data):
     """Add a new Barang Masuk entry."""
@@ -163,7 +171,7 @@ def delete_barang_masuk(data):
             return
     print("Data dengan ID tersebut tidak ditemukan.")
 
-if __name__ == "__main__":
+def main():
     file_path = "database.json"
     data = load_data(file_path)
 
@@ -185,9 +193,11 @@ if __name__ == "__main__":
                 add_barang_masuk(data)
                 save_data(file_path, data)
             elif choice == "3":
+                display_barang_masuk(data)
                 update_barang_masuk(data)
                 save_data(file_path, data)
             elif choice == "4":
+                display_barang_masuk(data)
                 delete_barang_masuk(data)
                 save_data(file_path, data)
             elif choice == "5":

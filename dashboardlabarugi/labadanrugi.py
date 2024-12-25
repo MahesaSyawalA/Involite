@@ -1,1 +1,0 @@
-print("Ini laba dan rugi!")

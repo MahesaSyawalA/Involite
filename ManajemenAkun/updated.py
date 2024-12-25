@@ -53,7 +53,10 @@ def logout(database):
     if sessions:
         print("\nLogout dari semua sesi...")
         database["sessions"] = []
+        save_data('database.json', database)
+
         print("Logout berhasil.\n")
+    
     else:
         print("\nTidak ada sesi aktif untuk logout.\n")
 
@@ -122,6 +125,3 @@ def main():
             break
         else:
             print("\nPilihan tidak valid, silakan coba lagi.\n")
-
-if __name__ == "__main__":
-    main()

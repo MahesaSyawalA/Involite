@@ -161,5 +161,3 @@ def main():
     dashboard_barang(database)
     save_data(database)
 
-if __name__ == "__main__":
-    main()

@@ -41,3 +41,7 @@ with open("database.json", "r") as file:
 
 print("Data berhasil dimodifikasi, disimpan, dan dimuat:")
 print(json.dumps(loaded_data, indent=4))
+
+def rundb():
+    with open("database.json", "w") as file:
+        json.dump(data, file, indent=4)

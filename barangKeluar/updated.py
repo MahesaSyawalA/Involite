@@ -198,5 +198,3 @@ def main():
         else:
             print("\nPilihan tidak valid, silakan coba lagi.\n")
 
-if __name__ == "__main__":
-    main()
