@@ -1,10 +1,10 @@
 import json
 from dashboardBarang.index import main as DashboardBarang
-from dashboardBarangMasuk.updated import main as DashboardBarangMasuk
-from barangKeluar.updated import main as DashboardBarangKeluar
-from dashboardlabarugi.updated import main as DashboardLabaRugi
-from ManajemenAkun.updated import main as ManagementAkun
-from ManajemenAkun.updated import logout as Logout
+from dashboardBarangMasuk.index import main as DashboardBarangMasuk
+from barangKeluar.index import main as DashboardBarangKeluar
+from dashboardlabarugi.index import main as DashboardLabaRugi
+from ManajemenAkun.index import main as ManagementAkun
+from ManajemenAkun.index import logout as Logout
 # from dataBase.index import rundb  
 
 def load_database():
