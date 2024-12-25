@@ -21,7 +21,9 @@ data = {
     "profitLossReport": [
         {"idReport": "1", "tanggalAwal": "2024-11-01", "tanggalAkhir": "2024-11-30", "totalPemasukan": 235000, "totalPengeluaran": 1020000, "totalLabaRugi": -785000, "createdAt": "2024-12-01"}
     ],
-    'sessions': []
+    'sessions': [
+        {"namaUser":"zahra"}
+    ]
 }
 
 # Modifikasi barang: ubah hargaSatuan ke hargaModal, tambahkan hargaJual
