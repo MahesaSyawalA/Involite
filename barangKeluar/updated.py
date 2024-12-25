@@ -1,5 +1,4 @@
 import json
-from tabulate import tabulate
 
 def load_database():
     try:
@@ -14,70 +13,12 @@ def save_data(file_path, data):
     with open(file_path, "w") as file:
         json.dump(data, file, indent=4)
 
-def tampilkan_barang(database, type='barang'):
-    if type == 'barang':
-        """Tampilkan data barang dalam bentuk tabel."""
-        barang_list = database.get("barang", [])
-
-        if not barang_list:
-            print("\nTidak ada data barang yang tersedia.\n")
-            return
-
-        headers = ["ID Barang", "Nama Barang", "Stok", "Kategori", "Harga Satuan", "Tanggal Dibuat", "Barang Keluar"]
-        table = []
-        
-        for barang in barang_list:
-            # Find related barangKeluar records based on idBarang
-            barang_keluar_list = [barang_keluar for barang_keluar in database.get("barangKeluar", []) if barang_keluar["idBarang"] == barang["idBarang"]]
-            
-            # Create a string with all barangKeluar descriptions for this barang
-            barang_keluar_descriptions = "\n".join([f"ID: {bk['idBarangKeluar']}, Jumlah: {bk['jumlah']}, Tanggal: {bk['tanggalKeluar']}, Deskripsi: {bk['description']}" for bk in barang_keluar_list]) if barang_keluar_list else "Tidak ada barang keluar"
-            
-            table.append([
-                barang["idBarang"],
-                barang["namaBarang"],
-                barang["stok"],
-                barang["kategori"],
-                f"Rp{barang['hargaSatuan']}",
-                barang["createdAt"],
-                barang_keluar_descriptions
-            ])
-
-        print(tabulate(table, headers=headers, tablefmt="grid"))
-
-    elif type == 'barangKeluar':
-        """Tampilkan data barang keluar dalam bentuk tabel."""
-        barang_keluar_list = database.get("barangKeluar", [])
-
-        if not barang_keluar_list:
-            print("\nTidak ada data barang keluar yang tersedia.\n")
-            return
-
-        headers = ["ID Barang Keluar", "ID Barang", "Nama Barang", "Stok", "Kategori", "Harga Satuan", "Tanggal Dibuat", "Deskripsi"]
-        table = []
-
-        for barang_keluar in barang_keluar_list:
-            # Find the related barang data based on idBarang
-            related_barang = next((barang for barang in database.get("barang", []) if barang["idBarang"] == barang_keluar["idBarang"]), None)
-            if related_barang:
-                table.append([
-                    barang_keluar["idBarangKeluar"],
-                    barang_keluar["idBarang"],
-                    related_barang["namaBarang"],
-                    barang_keluar["jumlah"],
-                    related_barang["kategori"],
-                    f"Rp{barang_keluar['hargaSatuan']}",
-                    barang_keluar["tanggalKeluar"],
-                    barang_keluar["description"]
-                ])
-
-        print(tabulate(table, headers=headers, tablefmt="grid"))
 def create_barang_keluar(database):
     """Tambah data barang keluar."""
     print("\n==== Tambah Barang Keluar ====")
 
     # Tampilkan daftar barang
-    tampilkan_barang(database,'barangKeluar')
+    show_database(database,'barang')
 
     # Input data barang keluar
     id_barang = input("Masukkan ID Barang: ")
@@ -92,7 +33,7 @@ def create_barang_keluar(database):
         print("\nJumlah barang keluar melebihi stok yang tersedia!\n")
         return
 
-    harga_satuan = barang["hargaSatuan"]
+    harga_satuan = barang["hargaJual"]
     total_penjualan = jumlah * harga_satuan
     tanggal_keluar = input("Masukkan tanggal keluar (YYYY-MM-DD): ")
     description = input("Masukkan deskripsi: ")
@@ -116,19 +57,33 @@ def create_barang_keluar(database):
 
     print("\nBarang keluar berhasil ditambahkan!\n")
 
-def read_barang_keluar(database):
-    print("==== Data Barang Keluar ====")
-    for barang_keluar in database["barangKeluar"]:
-        barang = next((b for b in database["barang"] if b["idBarang"] == barang_keluar["idBarang"]), {})
-        nama_barang = barang.get("namaBarang", "Tidak Diketahui")
-        print(f"""
-        ID Barang Keluar: {barang_keluar['idBarangKeluar']}
-        Nama Barang: {nama_barang}
-        Jumlah: {barang_keluar['jumlah']}
-        Harga Satuan: {barang_keluar['hargaSatuan']}
-        Total Penjualan: {barang_keluar['totalPenjualan']}
-        Tanggal Keluar: {barang_keluar['tanggalKeluar']}
-        Deskripsi: {barang_keluar['description']}
+def show_database(database, type='tipe'):
+    if type == 'barangKeluar':
+        for barang_keluar in database["barangKeluar"]:
+            barang = next((b for b in database["barang"] if b["idBarang"] == barang_keluar["idBarang"]), {})
+            nama_barang = barang.get("namaBarang", "Tidak Diketahui")
+            print(f"""
+            ID Barang Keluar: {barang_keluar['idBarangKeluar']}
+            Nama Barang: {nama_barang}
+            Jumlah: {barang_keluar['jumlah']}
+            Harga Satuan: {barang_keluar['hargaSatuan']}
+            Total Penjualan: {barang_keluar['totalPenjualan']}
+            Tanggal Keluar: {barang_keluar['tanggalKeluar']}
+            Deskripsi: {barang_keluar['description']}
+            """)
+    if type == 'barang':
+        barang_list = database.get("barang", [])
+        if not barang_list:
+            print("\nTidak ada data barang yang tersedia.\n")
+            return
+        for barang in barang_list:
+            print(f"""
+        ID Barang: {barang['idBarang']}
+        Nama Barang: {barang['namaBarang']}
+        Kategori Barang: {barang['kategori']}
+        Stok Barang: {barang['stok']}
+        Harga Jual: Rp{barang['hargaJual']}
+        Tanggal Dibuat: {barang['createdAt']}
         """)
 
 def update_barang_keluar(database):
@@ -142,21 +97,7 @@ def update_barang_keluar(database):
         print("\nTidak ada data barang keluar yang tersedia.\n")
         return
 
-    headers = ["ID Barang Keluar", "ID Barang", "Jumlah", "Harga Satuan", "Total Penjualan", "Tanggal Keluar", "Deskripsi"]
-    table = [
-        [
-            bk["idBarangKeluar"],
-            bk["idBarang"],
-            bk["jumlah"],
-            f"Rp{bk['hargaSatuan']}",
-            f"Rp{bk['totalPenjualan']}",
-            bk["tanggalKeluar"],
-            bk["description"]
-        ]
-        for bk in barang_keluar_list
-    ]
-
-    print(tabulate(table, headers=headers, tablefmt="grid"))
+    show_database(database, 'barangKeluar')
 
     # Pilih data yang akan diedit
     id_barang_keluar = input("Masukkan ID Barang Keluar yang ingin diedit: ")
@@ -167,7 +108,7 @@ def update_barang_keluar(database):
         return
 
     # Tampilkan daftar barang (calling the previous function to show barang)
-    tampilkan_barang(database, type='barang')
+    show_database(database, type='barang')
 
     # Edit data barang keluar
     id_barang = input(f"Masukkan ID Barang [{barang_keluar['idBarang']}]: ") or barang_keluar["idBarang"]
@@ -184,7 +125,7 @@ def update_barang_keluar(database):
         print("\nJumlah barang keluar melebihi stok yang tersedia!\n")
         return
 
-    harga_satuan = barang["hargaSatuan"]
+    harga_satuan = barang["hargaJual"]
     total_penjualan = jumlah_baru * harga_satuan
     tanggal_keluar = input(f"Masukkan tanggal keluar [{barang_keluar['tanggalKeluar']}]: ") or barang_keluar["tanggalKeluar"]
     description = input(f"Masukkan deskripsi [{barang_keluar['description']}]: ") or barang_keluar["description"]
@@ -206,6 +147,7 @@ def update_barang_keluar(database):
 
 def delete_barang_keluar(database):
     print("==== Hapus Barang Keluar ====")
+    show_database(database, 'barangKeluar')
     id_barang_keluar = input("Masukkan ID Barang Keluar yang ingin dihapus: ")
 
     # Cari barang keluar
@@ -242,7 +184,8 @@ def main():
             create_barang_keluar(database)
             save_data(file_path, database)
         elif pilihan == "2":
-            read_barang_keluar(database)
+            print("==== Data Barang Keluar ====")
+            show_database(database, 'barangKeluar')
         elif pilihan == "3":
             update_barang_keluar(database)
             save_data(file_path, database)

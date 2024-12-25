@@ -54,5 +54,21 @@
         "harga_satuan": 321,
         "jumlah": 12,
         "total_harga": 3852
+    },
+    {
+        "waktu": "2024-12-17 14: 58: 27",
+        "idbrg": "704993b9-aefa-43b3-b274-ff426f635233",
+        "nama": "Dodol Garut",
+        "harga_satuan": 321,
+        "jumlah": 12,
+        "total_harga": 3852
+    },
+    {
+        "waktu": "2024-12-18 15: 51: 08",
+        "idbrg": "704993b9-aefa-43b3-b274-ff426f635233",
+        "nama": "Dodol Garut",
+        "harga_satuan": 321,
+        "jumlah": 123,
+        "total_harga": 39483
     }
 ]
