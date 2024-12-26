@@ -1,13 +1,19 @@
-import json
 from datetime import datetime
-from tabulate import tabulate
+from helper import load_data,save_data,validate_input
+
+
 
 def filter_by_date(data_list, start_date, end_date, date_key):
     """Filter data berdasarkan rentang tanggal"""
-    return [
-        item for item in data_list
-        if start_date <= datetime.strptime(item[date_key], "%Y-%m-%d") <= end_date
-    ]
+    filtered_data = []
+    for item in data_list:
+        try:
+            date = datetime.strptime(item[date_key], "%Y-%m-%d")
+            if start_date <= date <= end_date:
+                filtered_data.append(item)
+        except ValueError:
+            print(f"Tanggal tidak valid pada data: {item}")
+    return filtered_data
 
 def calculate_profit_loss(start_date, end_date, data):
     """Menghitung laporan laba rugi berdasarkan periode tanggal"""
@@ -19,10 +25,10 @@ def calculate_profit_loss(start_date, end_date, data):
     barang_keluar_filtered = filter_by_date(data['barangKeluar'], start_date, end_date, 'tanggalKeluar')
 
     # Total pengeluaran dari barang masuk
-    total_pengeluaran = sum(item['totalModal'] for item in barang_masuk_filtered)
+    total_pengeluaran = sum(item.get('totalModal', 0) for item in barang_masuk_filtered)
 
     # Total pemasukan dari barang keluar
-    total_pemasukan = sum(item['totalPenjualan'] for item in barang_keluar_filtered)
+    total_pemasukan = sum(item.get('totalPenjualan', 0) for item in barang_keluar_filtered)
 
     # Menghitung laba/rugi
     total_laba_rugi = total_pemasukan - total_pengeluaran
@@ -36,46 +42,33 @@ def calculate_profit_loss(start_date, end_date, data):
         "totalLabaRugi": total_laba_rugi
     }
 
-def show_accumulated_reports(data):
-    """Menampilkan laporan laba rugi yang sudah diakumulasikan"""
-    print("\n=== LAPORAN YANG TELAH DIAKUMULASIKAN ===")
-    if not data['profitLossReport']:
-        print("Belum ada laporan yang diakumulasikan.")
-        return
-
-    table_data = []
-    for report in data['profitLossReport']:
-        table_data.append([
-            report['idReport'],
-            report['tanggalAwal'],
-            report['tanggalAkhir'],
-            f"Rp{report['totalPemasukan']:,}",
-            f"Rp{report['totalPengeluaran']:,}",
-            f"Rp{report['totalLabaRugi']:,}",
-            report['createdAt']
-        ])
-
-    headers = ["ID Laporan", "Tanggal Awal", "Tanggal Akhir", "Total Pemasukan", "Total Pengeluaran", "Total Laba/Rugi", "Dibuat Pada"]
-    print(tabulate(table_data, headers=headers, tablefmt="grid"))
-
 def create_new_report(data):
     """Membuat laporan laba rugi baru"""
-    start_date = input("Masukkan tanggal mulai (YYYY-MM-DD): ")
-    end_date = input("Masukkan tanggal akhir (YYYY-MM-DD): ")
+    
+    date_pattern = r"^\d{4}-\d{2}-\d{2}$"
+
+    start_date = validate_input(
+        prompt="Masukkan tanggal mulai (YYYY-MM-DD): ",
+        pattern=date_pattern,
+        validate_date=True 
+    )
+
+    end_date = validate_input(
+        prompt="Masukkan tanggal akhir (YYYY-MM-DD): ",
+        pattern=date_pattern,
+        validate_date=True
+    )
 
     try:
         report = calculate_profit_loss(start_date, end_date, data)
 
         print("\n=== LAPORAN LABA RUGI BARU ===")
-        table_data = [[
-            report['tanggalAwal'],
-            report['tanggalAkhir'],
-            f"Rp{report['totalPemasukan']:,}",
-            f"Rp{report['totalPengeluaran']:,}",
-            f"Rp{report['totalLabaRugi']:,}"
-        ]]
-        headers = ["Tanggal Awal", "Tanggal Akhir", "Total Pemasukan", "Total Pengeluaran", "Total Laba/Rugi"]
-        print(tabulate(table_data, headers=headers, tablefmt="grid"))
+        print(f"Tanggal Awal : {report['tanggalAwal']}")
+        print(f"Tanggal Akhir : {report['tanggalAkhir']}")
+        print(f"Total Pemasukan : {report['totalPemasukan']}")
+        print(f"Total Pengeluaran : {report['totalPengeluaran']}")
+        print(f"Total Laba / Rugi : {report['totalLabaRugi']}")
+        print('-' * 40)
 
         # Simpan laporan ke dalam data
         report["idReport"] = str(len(data["profitLossReport"]) + 1)
@@ -83,8 +76,7 @@ def create_new_report(data):
         data["profitLossReport"].append(report)
 
         # Update file JSON
-        with open("database.json", "w") as file:
-            json.dump(data, file, indent=4)
+        save_data(data) 
 
         print("\nLaporan berhasil disimpan!")
 
@@ -93,8 +85,7 @@ def create_new_report(data):
 
 def main():
     # Membaca data dari file JSON
-    with open("database.json", "r") as file:
-        data = json.load(file)
+    data = load_data()
 
     while True:
         print("\n=== Dashboard Laba Rugi ===")
@@ -114,4 +105,35 @@ def main():
         else:
             print("Pilihan tidak valid.")
 
+def show_accumulated_reports(data):
+    """Menampilkan laporan laba rugi yang sudah diakumulasikan"""
+    print("\n=== LAPORAN YANG TELAH DIAKUMULASIKAN ===")
+    if not data['profitLossReport']:
+        print("Belum ada laporan yang diakumulasikan.")
+        return
 
+    table_data = []
+    for report in data['profitLossReport']:
+        # table_data.append([
+        #     report['idReport'],
+        #     report['tanggalAwal'],
+        #     report['tanggalAkhir'],
+        #     f"Rp{report['totalPemasukan']:,}",
+        #     f"Rp{report['totalPengeluaran']:,}",
+        #     f"Rp{report['totalLabaRugi']:,}",
+        #     report['createdAt']
+        # ])
+
+        print(f'ID Laporan : {report['idReport']}')
+        print(f'Tanggal Awal : {report['tanggalAwal']}')
+        print(f'Tanggal Akhir : {report['tanggalAkhir']}')
+        print(f'Total Pemasukan : {report['totalPemasukan']}')
+        print(f'Total Pengeluaran : {report['totalPengeluaran']}')
+        print(f'Total Laba / Rugi : {report['totalLabaRugi']}')
+        print(f'Created At : {report['createdAt']}')
+        print('-'*40)
+        
+
+
+    # headers = ["ID Laporan", "Tanggal Awal", "Tanggal Akhir", "Total Pemasukan", "Total Pengeluaran", "Total Laba/Rugi", "Dibuat Pada"]
+    # print(tabulate(table_data, headers=headers, tablefmt="grid"))

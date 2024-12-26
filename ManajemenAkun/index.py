@@ -1,17 +1,5 @@
 import json
-
-def load_database():
-    try:
-        with open("database.json", "r") as file:
-            return json.load(file)
-    except FileNotFoundError:
-        print("Database tidak ditemukan!")
-        return None
-
-def save_data(file_path, data):
-    """Save JSON data to a file."""
-    with open(file_path, "w") as file:
-        json.dump(data, file, indent=4)
+from helper import load_data,save_data,validate_input
 
 def check_session(database):
     sessions = database.get("sessions", [])
@@ -80,8 +68,7 @@ def register(database):
     print("\nAkun berhasil didaftarkan! Silakan login.\n")
 
 def main():
-    file_path = "database.json"  
-    database = load_database()
+    database = load_data()
     # print(json.dumps(database, indent=4));
     if not database:
         return
@@ -97,7 +84,7 @@ def main():
             if pilihan == "1":
                 logout(database)
                 print(json.dumps(database, indent=4))
-                save_data(file_path, database)
+                save_data(database)
                 break
             elif pilihan == "2":
                 print("\nTerima kasih telah menggunakan sistem. Sampai jumpa!\n")
@@ -115,11 +102,11 @@ def main():
             user = login(database)
             if user:
                 print(f"\nSelamat datang, {user['nama']}!\n")
-                save_data(file_path, database)
+                save_data(database)
                 break
         elif pilihan == "2":
             register(database)
-            save_data(file_path, database)
+            save_data(database)
         elif pilihan == "3":
             print("\nTerima kasih telah menggunakan sistem. Sampai jumpa!\n")
             break

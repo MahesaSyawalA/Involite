@@ -1,21 +1,8 @@
-import json
 import re
-from tabulate import tabulate
-
-def load_data(file_path):
-    """Load JSON data from a file."""
-    try:
-        with open(file_path, "r") as file:
-            return json.load(file)
-    except FileNotFoundError:
-        print("File not found.")
-        return None
-    
-
-def save_data(file_path, data):
-    """Save JSON data to a file."""
-    with open(file_path, "w") as file:
-        json.dump(data, file, indent=4)
+import math
+from helper import validate_input  
+from helper import load_data
+from helper import save_data
 
 def generate_id_barang_masuk(data):
     """Generate a new ID Barang Masuk with the format BM001, BM002, etc."""
@@ -51,16 +38,6 @@ def display_barang_masuk(data):
         )
         print(paragraph)
 
-def validate_input(prompt, pattern, cast_type=str, default=None):
-    """Validate user input against a regex pattern."""
-    while True:
-        user_input = input(prompt)
-        if not user_input and default is not None:
-            return default
-        if re.match(pattern, user_input):
-            return cast_type(user_input)
-        print("Input tidak valid. Silakan coba lagi.")
-
 def choose_barang(data):
     """Allow user to choose a Barang from the available data."""
     if not data or "barang" not in data:
@@ -75,7 +52,7 @@ def choose_barang(data):
         )
 
     while True:
-        id_barang = input("Masukkan ID Barang yang dipilih: ")
+        id_barang = validate_input("Masukkan ID Barang yang dipilih: ",r"^[a-zA-Z0-9]+$")
         if any(item["idBarang"] == id_barang for item in data["barang"]):
             return id_barang
         print("ID Barang tidak valid. Silakan pilih dari daftar.")
@@ -89,8 +66,8 @@ def add_barang_masuk(data):
     jumlah = validate_input("Masukkan Jumlah: ", r"^\d+$", int)
     harga_satuan = validate_input("Masukkan Harga Satuan: ", r"^\d+$", int)
     total_modal = jumlah * harga_satuan
-    tanggal_masuk = validate_input("Masukkan Tanggal Masuk (YYYY-MM-DD): ", r"^\d{4}-\d{2}-\d{2}$")
-    description = input("Masukkan Deskripsi: ")
+    tanggal_masuk = validate_input("Masukkan Tanggal Masuk (YYYY-MM-DD): ", r"^\d{4}-\d{2}-\d{2}$",str,validate_date=True)
+    description = validate_input("Masukkan Deskripsi: ",r"^[a-zA-Z][0-9]*[!@#$%^&*()_+\-=,.?]*$",str)
 
     new_entry = {
         "idBarangMasuk": id_barang_masuk,
@@ -108,24 +85,25 @@ def add_barang_masuk(data):
         if barang["idBarang"] == id_barang:
             stok_sebelumnya = barang.get("stok", 0)
             modal_sebelumnya = stok_sebelumnya * barang.get("hargaModal", 0)
-            
+            modal_satuan_sebelumnya = barang.get('hargaModal',0)
+
             stok_baru = stok_sebelumnya + jumlah
             total_modal_baru = modal_sebelumnya + total_modal
             harga_modal_baru = total_modal_baru / stok_baru
 
             barang["stok"] = stok_baru
-            barang["hargaModal"] = harga_modal_baru
+            barang["hargaModal"] = math.ceil(harga_modal_baru)
 
             print(f"Stok barang '{barang['namaBarang']}' berhasil diperbarui.")
             print(f"Stok: {stok_sebelumnya} -> {stok_baru}")
-            print(f"Harga Modal/Satuan: {barang.get('hargaModal', 0)} -> {harga_modal_baru:.2f}")
+            print(f"Harga Modal/Satuan: {modal_satuan_sebelumnya} -> {math.ceil(harga_modal_baru)}")
             break
 
     print("Data Barang Masuk berhasil ditambahkan.")
 
 def update_barang_masuk(data):
     """Update an existing Barang Masuk entry."""
-    id_barang_masuk = input("Masukkan ID Barang Masuk yang ingin diupdate: ")
+    id_barang_masuk = validate_input("Masukkan ID Barang Masuk yang ingin diupdate: ",r"^[a-zA-Z0-9]+$",str)
     for entry in data["barangMasuk"]:
         if entry["idBarangMasuk"] == id_barang_masuk:
             print("Data ditemukan. Masukkan data baru atau tekan Enter untuk melewati.")
@@ -144,6 +122,7 @@ def update_barang_masuk(data):
                 if barang["idBarang"] == id_barang:
                     stok_sebelumnya = barang.get("stok", 0)
                     modal_sebelumnya = stok_sebelumnya * barang.get("hargaModal", 0)
+                    modal_satuan_sebelumnya = barang.get('hargaModal',0)
 
                     stok_baru = stok_sebelumnya - jumlah_lama + entry["jumlah"]
                     total_modal_baru = modal_sebelumnya - (jumlah_lama * barang.get("hargaModal", 0)) + entry["totalModal"]
@@ -154,7 +133,7 @@ def update_barang_masuk(data):
 
                     print(f"Stok barang '{barang['namaBarang']}' berhasil diperbarui.")
                     print(f"Stok: {stok_sebelumnya} -> {stok_baru}")
-                    print(f"Harga Modal/Satuan: {barang.get('hargaModal', 0)} -> {harga_modal_baru:.2f}")
+                    print(f"Harga Modal/Satuan: {modal_satuan_sebelumnya} -> {harga_modal_baru:.2f}")
                     break
 
             print("Data Barang Masuk berhasil diupdate.")
@@ -172,8 +151,7 @@ def delete_barang_masuk(data):
     print("Data dengan ID tersebut tidak ditemukan.")
 
 def main():
-    file_path = "database.json"
-    data = load_data(file_path)
+    data = load_data()
 
     if data:
         while True:
@@ -185,21 +163,21 @@ def main():
             print("4. Hapus Data Barang Masuk")
             print("5. Keluar")
 
-            choice = input("Pilih opsi: ")
+            choice = validate_input("Pilih Menu: ",r"^[0-9]+$",str)
 
             if choice == "1":
                 display_barang_masuk(data)
             elif choice == "2":
                 add_barang_masuk(data)
-                save_data(file_path, data)
+                save_data(data)
             elif choice == "3":
                 display_barang_masuk(data)
                 update_barang_masuk(data)
-                save_data(file_path, data)
+                save_data(data)
             elif choice == "4":
                 display_barang_masuk(data)
                 delete_barang_masuk(data)
-                save_data(file_path, data)
+                save_data(data)
             elif choice == "5":
                 print("Keluar dari program.")
                 break

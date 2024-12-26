@@ -1,17 +1,5 @@
-import json
+from helper import validate_input,save_data,load_data
 
-def load_database():
-    try:
-        with open("database.json", "r") as file:
-            return json.load(file)
-    except FileNotFoundError:
-        print("Database tidak ditemukan!")
-        return None
-
-def save_data(file_path, data):
-    """Save JSON data to a file."""
-    with open(file_path, "w") as file:
-        json.dump(data, file, indent=4)
 
 def create_barang_keluar(database):
     """Tambah data barang keluar."""
@@ -100,7 +88,7 @@ def update_barang_keluar(database):
     show_database(database, 'barangKeluar')
 
     # Pilih data yang akan diedit
-    id_barang_keluar = input("Masukkan ID Barang Keluar yang ingin diedit: ")
+    id_barang_keluar = validate_input("Masukkan ID Barang Keluar yang ingin diedit: ",r"^[a-zA-Z0-9]+$",str)
     barang_keluar = next((bk for bk in barang_keluar_list if bk["idBarangKeluar"] == id_barang_keluar), None)
 
     if not barang_keluar:
@@ -148,7 +136,7 @@ def update_barang_keluar(database):
 def delete_barang_keluar(database):
     print("==== Hapus Barang Keluar ====")
     show_database(database, 'barangKeluar')
-    id_barang_keluar = input("Masukkan ID Barang Keluar yang ingin dihapus: ")
+    id_barang_keluar =validate_input("Masukkan ID Barang Keluar yang ingin dihapus: ",r"^[a-zA-Z0-9]+$",str)
 
     # Cari barang keluar
     barang_keluar = next((b for b in database["barangKeluar"] if b["idBarangKeluar"] == id_barang_keluar), None)
@@ -166,8 +154,7 @@ def delete_barang_keluar(database):
     print("\nBarang keluar berhasil dihapus!\n")
 
 def main():
-    file_path = "database.json"
-    database = load_database()
+    database = load_data()
     if not database:
         return
 
@@ -182,19 +169,20 @@ def main():
 
         if pilihan == "1":
             create_barang_keluar(database)
-            save_data(file_path, database)
+            save_data(database)
         elif pilihan == "2":
             print("==== Data Barang Keluar ====")
             show_database(database, 'barangKeluar')
         elif pilihan == "3":
             update_barang_keluar(database)
-            save_data(file_path, database)
+            save_data(database)
         elif pilihan == "4":
             delete_barang_keluar(database)
-            save_data(file_path, database)
+            save_data(database)
         elif pilihan == "5":
             print("\nTerima kasih telah menggunakan sistem. Sampai jumpa!\n")
             break
         else:
             print("\nPilihan tidak valid, silakan coba lagi.\n")
+
 
