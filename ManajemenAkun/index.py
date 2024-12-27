@@ -12,8 +12,8 @@ def check_session(database):
 
 def login(database):
     print("==== Login Menu ====")
-    username = input("Masukkan username: ")
-    password = input("Masukkan password: ")
+    username = validate_input("Masukkan username: ",r"^[a-zA-Z][0-9]*[!@#$%^&*()_+\-=,.?]*[a-zA-Z]*$",str)
+    password = validate_input("Masukkan password: ",r"^[a-zA-Z][0-9]*[!@#$%^&*()_+\-=,.?]*[a-zA-Z]*$",str)
 
     for user in database.get("users", []):
         if user["username"] == username and user["password"] == password:
@@ -27,14 +27,6 @@ def login(database):
 
     print("\nLogin gagal! Username atau password salah.\n")
     return None
-
-def validasi_nama_pengguna(prompt):
-    while True:
-        nama_pengguna = input(prompt).strip()
-        if nama_pengguna and any(char.isalpha() for char in nama_pengguna) and nama_pengguna.isalnum() :
-            return nama_pengguna
-        else:
-            print(f"input data tidak boleh kosong dan harus menggandung huruf dan angka. Silahkan coba lagi")
 
 def logout(database):
     sessions = database.get("sessions", [])
@@ -50,9 +42,14 @@ def logout(database):
 
 def register(database):
     print("==== Register Akun ====")
-    nama =  validasi_nama_pengguna("Masukkan nama: ")
-    username = validasi_nama_pengguna("Masukkan username: ")
-    password = validasi_nama_pengguna("Masukkan password: ")
+    nama =  validate_input("Masukkan nama: ",r"^[^\s]*$",str)
+    username = validate_input("Masukkan username: ",r"^[^\s]*$",str)
+    while True:
+        password = validate_input("Masukkan password: ",r"^[^\s]*$",str)
+        if password == username :
+            print("username dan password tidak boleh sama ")
+        else:
+            break
     id_user = str(len(database.get("users", [])) + 1)
 
     new_user = {
