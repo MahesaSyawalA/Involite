@@ -12,8 +12,8 @@ def check_session(database):
 
 def login(database):
     print("==== Login Menu ====")
-    username = validate_input("Masukkan username: ",r"^[a-zA-Z][0-9]*[!@#$%^&*()_+\-=,.?]*[a-zA-Z]*$",str)
-    password = validate_input("Masukkan password: ",r"^[a-zA-Z][0-9]*[!@#$%^&*()_+\-=,.?]*[a-zA-Z]*$",str)
+    username = validate_input("Masukkan username: ",r"^[^\s]*$",str)
+    password = validate_input("Masukkan password: ",r"^[^\s]*$",str)
 
     for user in database.get("users", []):
         if user["username"] == username and user["password"] == password:

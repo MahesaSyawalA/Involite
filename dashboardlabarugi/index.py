@@ -20,6 +20,10 @@ def calculate_profit_loss(start_date, end_date, data):
     start_date = datetime.strptime(start_date, "%Y-%m-%d")
     end_date = datetime.strptime(end_date, "%Y-%m-%d")
 
+    type(end_date)
+    type(start_date)
+
+
     # Filter data barang masuk dan keluar berdasarkan tanggal
     barang_masuk_filtered = filter_by_date(data['barangMasuk'], start_date, end_date, 'tanggalMasuk')
     barang_keluar_filtered = filter_by_date(data['barangKeluar'], start_date, end_date, 'tanggalKeluar')
