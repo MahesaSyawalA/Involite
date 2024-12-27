@@ -41,7 +41,7 @@ def logout(database):
     if sessions:
         print("\nLogout dari semua sesi...")
         database["sessions"] = []
-        save_data('database.json', database)
+        save_data(database)
 
         print("Logout berhasil.\n")
     
