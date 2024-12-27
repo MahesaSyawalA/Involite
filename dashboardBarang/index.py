@@ -29,7 +29,6 @@ def tambah_barang(database):
     stok =  validate_input("Masukkan stok awal: ", r"^\d+$", int)
     kategori = validate_input("Masukkan kategori barang: ",r"^[a-zA-Z][0-9]*[!@#$%^&*()_+\-=,.?]*[a-zA-Z]*$",str)
     harga_jual = validate_input("Masukkan harga Jual satuan (tekan Enter jika belum ada): ", r"^\d+$", int, default=0)
-    harga_jual = int(harga_jual) if harga_jual.strip() else None
 
     id_barang = str(len(database.get("barang", [])) + 1)
     new_barang = {
