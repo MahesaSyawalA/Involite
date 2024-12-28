@@ -54,5 +54,7 @@ if __name__ == "__main__":
                     print('Masukkan opsi yang tepat.')
         else:
             print('\nTidak ada sesi aktif. Silakan login atau register terlebih dahulu.')
-            ManagementAkun()
+            kill =  ManagementAkun()
+            if kill == True:
+                break
             database = load_database()  # Perbarui `database` setelah login atau register

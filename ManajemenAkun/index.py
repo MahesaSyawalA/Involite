@@ -13,21 +13,32 @@ def check_session(database):
 
 def login(database):
     print("==== Login Menu ====")
-    username = validate_input("Masukkan username: ",r"^[^\s]*$",str)
-    password = validate_input("Masukkan password: ",r"^[^\s]*$",str)
+    users = database.get('users',[])
+    status = False
+    selectedUser = []           
+    while True:
+        username = validate_input("Masukkan username: ",r"^[^\s]*$",str)
+        for user in users:
+            if user['username'] == username: 
+                status = True
+                selectedUser.append(user)
+        if status == True:
+            break
+        else:
+            print('Username tidak ditemukan')       
 
-    for user in database.get("users", []):
-        if user["username"] == username and user["password"] == password:
-            print(f"\nLogin berhasil! Selamat datang, {user['nama']}!\n")
-
+    for i in range(3):
+        password = validate_input("Masukkan password: ",r"^[^\s]*$",str)    
+        if selectedUser[0]['password'] == password:
+            print('Login Berhasil! Selamat Datang')
             new_entry = {
                 "namaUser": user['nama']
             }
             database.setdefault("sessions", []).append(new_entry)
             return user
+        print(f'Password Salah!, kesempatan mencoba {-i+2} kali')
+    return print('Anda gagal untuk login ')
 
-    print("\nLogin gagal! Username atau password salah.\n")
-    return None
 
 def logout(database):
     sessions = database.get("sessions", [])
@@ -118,7 +129,7 @@ def main():
             save_data(database)
         elif pilihan == "3":
             print("\nTerima kasih telah menggunakan sistem. Sampai jumpa!\n")
-            break
+            return True
         else:
             print("\nPilihan tidak valid, silakan coba lagi.\n")
 
