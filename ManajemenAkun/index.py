@@ -1,6 +1,7 @@
 import json
 from helper import load_data,save_data,validate_input
 
+
 def check_session(database):
     sessions = database.get("sessions", [])
     if sessions:
@@ -43,9 +44,9 @@ def logout(database):
 def register(database):
     print("==== Register Akun ====")
     data_user = database.get('users',[])
-    nama =  validate_input("Masukkan nama: ",r"^[^\s]*$",str)
+    nama =  validate_input("Masukkan nama: ",r"^[^\s]+$",str)
     while True:
-        username = validate_input("Masukkan username: ",r"^[^\s]*$",str)
+        username = validate_input("Masukkan username: ",r"^[^\s]+$",str)
         used = False
         for user in data_user:
             if user['username'] == username:
@@ -57,7 +58,7 @@ def register(database):
             break
     
     while True:
-        password = validate_input("Masukkan password: ",r"^[^\s]*$",str)
+        password = validate_input("Masukkan password: ",r"^[^\s]+$",str)
         if password == username :
             print("username dan password tidak boleh sama ")
         else:
@@ -83,7 +84,6 @@ def main():
         return
 
     print("=== Selamat Datang di Sistem CLI ===")
-    print(check_session(database));
     if check_session(database):
         while True:
             print("\n1. Logout")
@@ -121,3 +121,4 @@ def main():
             break
         else:
             print("\nPilihan tidak valid, silakan coba lagi.\n")
+

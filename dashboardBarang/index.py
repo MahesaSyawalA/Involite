@@ -25,9 +25,9 @@ def lihat_barang(database):
 
 def tambah_barang(database):
     print("\n==== Tambah Barang Baru ====")
-    nama_barang = validate_input("Masukkan nama barang: ",r"^[a-zA-Z][0-9]*[!@#$%^&*()_+\-=,.?]*[a-zA-Z]*$",str)
+    nama_barang = validate_input("Masukkan nama barang: ",r"^[a-zA-Z0-9!@#$%^&*()_+\-=,.?]+$",str)
     stok =  validate_input("Masukkan stok awal: ", r"^\d+$", int)
-    kategori = validate_input("Masukkan kategori barang: ",r"^[a-zA-Z][0-9]*[!@#$%^&*()_+\-=,.?]*[a-zA-Z]*$",str)
+    kategori = validate_input("Masukkan kategori barang: ",r"^[a-zA-Z0-9!@#$%^&*()_+\-=,.?]+$",str)
     harga_jual = validate_input("Masukkan harga Jual satuan (tekan Enter jika belum ada): ", r"^\d+$", int, default=0)
 
     id_barang = str(len(database.get("barang", [])) + 1)
