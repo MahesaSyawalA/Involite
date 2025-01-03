@@ -63,11 +63,11 @@ def add_barang_masuk(data):
     """Add a new Barang Masuk entry."""
     id_barang_masuk = generate_id_barang_masuk(data)
     id_barang = choose_barang(data)
-    jumlah = validate_input("Masukkan Jumlah: ", r"^\d+$", int)
+    jumlah = validate_input("Masukkan Jumlah: ", r"^[1-9]+$", int)
     harga_satuan = validate_input("Masukkan Harga Satuan: ", r"^\d+$", int)
     total_modal = jumlah * harga_satuan
     tanggal_masuk = validate_input("Masukkan Tanggal Masuk (YYYY-MM-DD): ", r"^\d{4}-\d{2}-\d{2}$",str,validate_date=True)
-    description = validate_input("Masukkan Deskripsi: ",r"^[a-zA-Z][0-9]*[!@#$%^&*()_+\-=,.?]*$",str)
+    description = validate_input("Masukkan Deskripsi: ",r"^.*$",str)
 
     new_entry = {
         "idBarangMasuk": id_barang_masuk,
@@ -142,11 +142,33 @@ def update_barang_masuk(data):
 
 def delete_barang_masuk(data):
     id_barang_masuk = input("Masukkan ID Barang Masuk yang ingin dihapus: ")
+
+    # Cari entri barang masuk berdasarkan ID
     for entry in data["barangMasuk"]:
         if entry["idBarangMasuk"] == id_barang_masuk:
+            # Kurangi stok barang yang terkait
+            id_barang = entry["idBarang"]
+            jumlah = entry["jumlah"]
+            harga_satuan = entry["hargaSatuan"]
+
+            for barang in data["barang"]:
+                if barang["idBarang"] == id_barang:
+                    # Kurangi stok barang
+                    barang["stok"] -= jumlah
+
+                    if barang["stok"] > 0:
+                        total_modal_sekarang = barang["stok"] * barang["hargaModal"]
+                        total_modal_baru = total_modal_sekarang - (jumlah * harga_satuan)
+                        barang["hargaModal"] = total_modal_baru / barang["stok"]
+                    else:
+                        barang["hargaModal"] = 0
+
+                    break
+
             data["barangMasuk"].remove(entry)
             print("Data Barang Masuk berhasil dihapus.")
             return
+
     print("Data dengan ID tersebut tidak ditemukan.")
 
 def main():

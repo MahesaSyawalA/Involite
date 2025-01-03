@@ -61,9 +61,9 @@ def logout(database):
 def register(database):
     print("==== Register Akun ====")
     data_user = database.get('users',[])
-    nama =  validate_input("Masukkan nama: ",r"^[^\s]+$",str)
+    nama =  validate_input("Masukkan nama: ",r"^[a-zA-Z][^\s]*$",str)
     while True:
-        username = validate_input("Masukkan username: ",r"^[^\s]+$",str)
+        username = validate_input("Masukkan username: ",r"^[a-zA-Z][^\s]*$",str)
         used = False
         for user in data_user:
             if user['username'] == username:
@@ -75,7 +75,7 @@ def register(database):
             break
     
     while True:
-        password = validate_input("Masukkan password: ",r"^[^\s]+$",str)
+        password = validate_input("Masukkan password: ",r"^(?=.*[a-zA-Z])[^\s]*$",str)
         if password == username :
             print("username dan password tidak boleh sama ")
         else:
