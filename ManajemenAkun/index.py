@@ -13,31 +13,37 @@ def check_session(database):
 
 def login(database):
     print("==== Login Menu ====")
-    users = database.get('users',[])
+    users = database.get('users', [])
     status = False
-    selectedUser = []           
+    selectedUser = []
+
     while True:
-        username = validate_input("Masukkan username: ",r"^[^\s]*$",str)
+        username = validate_input("Masukkan username: ", r"^[^\s]*$", str)
         for user in users:
-            if user['username'] == username: 
+            if user['username'] == username:
                 status = True
                 selectedUser.append(user)
-        if status == True:
+                break  
+
+        if status:
             break
         else:
-            print('Username tidak ditemukan')       
+            print('Username tidak ditemukan')
 
     for i in range(3):
-        password = validate_input("Masukkan password: ",r"^[^\s]*$",str)    
+        password = validate_input("Masukkan password: ", r"^[^\s]*$", str)
         if selectedUser[0]['password'] == password:
             print('Login Berhasil! Selamat Datang')
             new_entry = {
-                "namaUser": user['nama']
+                "namaUser": selectedUser[0]['nama']
             }
             database.setdefault("sessions", []).append(new_entry)
-            return user
-        print(f'Password Salah!, kesempatan mencoba {-i+2} kali')
-    return print('Anda gagal untuk login ')
+            return selectedUser[0]
+        print(f'Password Salah!, kesempatan mencoba {2 - i} kali')
+
+    selectedUser.clear()
+    print('Anda gagal untuk login')
+    return None
 
 
 def logout(database):
@@ -84,13 +90,11 @@ def register(database):
         "createdAt": "2024-12-16"
     }
 
-    # databaseuser = database.get("users", []).append(new_user)
     database.setdefault("users", []).append(new_user)
     print("\nAkun berhasil didaftarkan! Silakan login.\n")
 
 def main():
     database = load_data()
-    # print(json.dumps(database, indent=4));
     if not database:
         return
 
