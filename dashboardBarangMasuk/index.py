@@ -141,7 +141,6 @@ def update_barang_masuk(data):
     print("Data dengan ID tersebut tidak ditemukan.")
 
 def delete_barang_masuk(data):
-    """Delete a Barang Masuk entry."""
     id_barang_masuk = input("Masukkan ID Barang Masuk yang ingin dihapus: ")
     for entry in data["barangMasuk"]:
         if entry["idBarangMasuk"] == id_barang_masuk:
@@ -163,7 +162,7 @@ def main():
             print("4. Hapus Data Barang Masuk")
             print("5. Keluar")
 
-            choice = validate_input("Pilih Menu: ",r"^[0-9]+$",str)
+            choice = validate_input("Pilih Menu: ",r"^[0-9]+$",str,menu=True,maxMenu=5)
 
             if choice == "1":
                 display_barang_masuk(data)
