@@ -1,5 +1,6 @@
 import re
 import math
+import json
 from helper import validate_input  
 from helper import load_data
 from helper import save_data
@@ -19,12 +20,16 @@ def display_barang_masuk(data):
         print("Data tidak valid atau tidak lengkap.")
         return
 
-    barang_dict = {item["idBarang"]: item for item in data["barang"]}
+    barang_dict = data.get('barang',{})
 
     print("")
     for entry in data["barangMasuk"]:
         id_barang = entry["idBarang"]
-        nama_barang = barang_dict.get(id_barang, {}).get("namaBarang", "Tidak Diketahui")
+        nama_barang = 'nama barang tidak diketahui'
+        for item in barang_dict:
+            if item['idBarang'] == id_barang:
+                nama_barang = item['namaBarang'] 
+        
 
         paragraph = (
             f"ID Barang Masuk: {entry['idBarangMasuk']}\n"
@@ -53,8 +58,9 @@ def choose_barang(data):
 
     while True:
         id_barang = validate_input("Masukkan ID Barang yang dipilih: ",r"^[a-zA-Z0-9]+$")
-        if any(item["idBarang"] == id_barang for item in data["barang"]):
-            return id_barang
+        for item in data['barang']:
+            if item["idBarang"] == id_barang:
+                return id_barang
         print("ID Barang tidak valid. Silakan pilih dari daftar.")
 
 
@@ -63,7 +69,7 @@ def add_barang_masuk(data):
     """Add a new Barang Masuk entry."""
     id_barang_masuk = generate_id_barang_masuk(data)
     id_barang = choose_barang(data)
-    jumlah = validate_input("Masukkan Jumlah: ", r"^[1-9]+$", int)
+    jumlah = validate_input("Masukkan Jumlah: ", r"^[1-9][0-9]+$", int)
     harga_satuan = validate_input("Masukkan Harga Satuan: ", r"^\d+$", int)
     total_modal = jumlah * harga_satuan
     tanggal_masuk = validate_input("Masukkan Tanggal Masuk (YYYY-MM-DD): ", r"^\d{4}-\d{2}-\d{2}$",str,validate_date=True)
@@ -170,6 +176,7 @@ def delete_barang_masuk(data):
             return
 
     print("Data dengan ID tersebut tidak ditemukan.")
+
 
 def main():
     data = load_data()

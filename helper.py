@@ -8,7 +8,7 @@ def load_data():
         with open("database.json", "r") as file:
             return json.load(file)
     except FileNotFoundError:
-        print("File not found.")
+        print("File Database not found.")
         return None
     
 
