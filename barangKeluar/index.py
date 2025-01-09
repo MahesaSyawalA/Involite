@@ -9,21 +9,21 @@ def create_barang_keluar(database):
     show_database(database,'barang')
 
     # Input data barang keluar
-    id_barang = input("Masukkan ID Barang: ")
+    id_barang = validate_input("Masukkan ID Barang: ",r"^[a-zA-Z0-9]+$")
     barang = next((b for b in database.get("barang", []) if b["idBarang"] == id_barang), None)
 
     if not barang:
         print("\nID Barang tidak ditemukan. Silakan coba lagi.\n")
         return
 
-    jumlah = int(input("Masukkan jumlah barang keluar: "))
+    jumlah = validate_input("Masukkan jumlah barang keluar: ","^[0-9]+$", int)
     if jumlah > barang["stok"]:
         print("\nJumlah barang keluar melebihi stok yang tersedia!\n")
         return
 
     harga_satuan = barang["hargaJual"]
     total_penjualan = jumlah * harga_satuan
-    tanggal_keluar = input("Masukkan tanggal keluar (YYYY-MM-DD): ")
+    tanggal_keluar = validate_input("Masukkan tanggal keluar (YYYY-MM-DD): ",r"^\d{4}-\d{2}-\d{2}$",str,validate_date=True)
     description = input("Masukkan deskripsi: ")
 
     id_barang_keluar = str(len(database.get("barangKeluar", [])) + 1)
@@ -45,7 +45,7 @@ def create_barang_keluar(database):
 
     print("\nBarang keluar berhasil ditambahkan!\n")
 
-def show_database(database, type='tipe'):
+def show_database(database, type):
     if type == 'barangKeluar':
         for barang_keluar in database["barangKeluar"]:
             barang = next((b for b in database["barang"] if b["idBarang"] == barang_keluar["idBarang"]), {})
@@ -103,7 +103,7 @@ def update_barang_keluar(database):
     show_database(database, type='barang')
 
     # Edit data barang keluar
-    id_barang = input(f"Masukkan ID Barang [{barang_keluar['idBarang']}]: ") or barang_keluar["idBarang"]
+    id_barang = validate_input(f"Masukkan ID Barang [{barang_keluar['idBarang']}]: ",r"^[a-zA-Z0-9]+$", default=barang_keluar["idBarang"])
     barang = None
     for b in database.get("barang", []):
         if b["idBarang"] == id_barang:
@@ -115,7 +115,7 @@ def update_barang_keluar(database):
         return
 
     jumlah_lama = barang_keluar["jumlah"]
-    jumlah_baru = int(input(f"Masukkan jumlah barang keluar [{jumlah_lama}]: ") or jumlah_lama)
+    jumlah_baru = validate_input(f"Masukkan jumlah barang keluar [{jumlah_lama}]: ", r"^[0-9]+$",int, default=jumlah_lama)
 
     if jumlah_baru > barang["stok"] + jumlah_lama:
         print("\nJumlah barang keluar melebihi stok yang tersedia!\n")
@@ -123,7 +123,7 @@ def update_barang_keluar(database):
 
     harga_satuan = barang["hargaJual"]
     total_penjualan = jumlah_baru * harga_satuan
-    tanggal_keluar = input(f"Masukkan tanggal keluar [{barang_keluar['tanggalKeluar']}]: ") or barang_keluar["tanggalKeluar"]
+    tanggal_keluar = validate_input(f"Masukkan tanggal keluar [{barang_keluar['tanggalKeluar']}]: ", r"^\d{4}-\d{2}-\d{2}$",validate_date=True, default=barang_keluar["tanggalKeluar"])
     description = input(f"Masukkan deskripsi [{barang_keluar['description']}]: ") or barang_keluar["description"]
 
     # Update data barang keluar
@@ -181,21 +181,21 @@ def main():
         print("3. Update Barang Keluar")
         print("4. Hapus Barang Keluar")
         print("5. Keluar")
-        pilihan = input("Pilih menu: ")
+        pilihan = validate_input("Pilih menu: ", "^[0-9]$", int, menu=True, maxMenu=5)
 
-        if pilihan == "1":
+        if pilihan == 1:
             create_barang_keluar(database)
             save_data(database)
-        elif pilihan == "2":
+        elif pilihan == 2:
             print("==== Data Barang Keluar ====")
             show_database(database, 'barangKeluar')
-        elif pilihan == "3":
+        elif pilihan == 3:
             update_barang_keluar(database)
             save_data(database)
-        elif pilihan == "4":
+        elif pilihan == 4:
             delete_barang_keluar(database)
             save_data(database)
-        elif pilihan == "5":
+        elif pilihan == 5:
             print("\nTerima kasih telah menggunakan sistem. Sampai jumpa!\n")
             break
         else:
