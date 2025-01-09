@@ -25,9 +25,9 @@ def lihat_barang(database):
 
 def tambah_barang(database):
     print("\n==== Tambah Barang Baru ====")
-    nama_barang = validate_input("Masukkan nama barang: ",r"^[a-zA-Z0-9!@#$%^&*()_+\-=,.?]+$",str)
+    nama_barang = validate_input("Masukkan nama barang: ",r"^[a-zA-Z0-9!@#$%^&*()_+\-=,.?\s]+$",str)
     stok =  validate_input("Masukkan stok awal: ", r"^\d+$", int)
-    kategori = validate_input("Masukkan kategori barang: ",r"^[a-zA-Z0-9!@#$%^&*()_+\-=,.?]+$",str)
+    kategori = validate_input("Masukkan kategori barang: ",r"^[a-zA-Z0-9!@#$%^&*()_+\-=,.?\s]+$",str)
     harga_jual = validate_input("Masukkan harga Jual satuan (tekan Enter jika belum ada): ", r"^\d+$", int, default=0)
 
     id_barang = str(len(database.get("barang", [])) + 1)
@@ -64,10 +64,10 @@ def edit_barang(database):
 
     if barang:
         print(f"\nMengedit barang: {barang['namaBarang']}")
-        barang['namaBarang'] = input(f"Nama Barang [{barang['namaBarang']}]: ") or barang['namaBarang']
-        barang['stok'] = int(input(f"Stok [{barang['stok']}]: ") or barang['stok'])
-        barang['kategori'] = input(f"Kategori [{barang['kategori']}]: ") or barang['kategori']
-        harga_jual = input(f"Harga Jual [{barang['hargaJual'] or 'Belum Ditentukan'}]: ")
+        barang['namaBarang'] = validate_input(f"Nama Barang [{barang['namaBarang']}]: ",r"^[a-zA-Z0-9!@#$%^&*()_+\-=,.?\s]+$",str,default=barang['namaBarang']) 
+        barang['stok'] = validate_input(f"Stok [{barang['stok']}]: ",r"^\d+$",int,default=barang['stok'])
+        barang['kategori'] = validate_input(f"Kategori [{barang['kategori']}]: ",r"^[a-zA-Z0-9!@#$%^&*()_+\-=,.?\s]+$",str,default=barang['kategori'])
+        harga_jual = validate_input(f"Harga Jual [{barang['hargaJual'] or 'Belum Ditentukan'}]: ",r"^\d+$",int,default=0)
         barang['hargaJual'] = int(harga_jual) if harga_jual.strip() else barang['hargaJual']
         print("\nBarang berhasil diperbarui!\n")
     else:
@@ -84,7 +84,7 @@ def hapus_barang(database):
 
     lihat_barang(database)
 
-    id_barang =validate_input("Masukkan ID Barang yang ingin dihapus: ", r'^[a-zA-Z0-9 ]+$', str)
+    id_barang =validate_input("Masukkan ID Barang yang ingin dihapus: ", r'^[a-zA-Z0-9]+$', str)
 
     # Mencari barang berdasarkan ID Barang
     barang = None
