@@ -115,7 +115,7 @@ def update_barang_keluar(database):
         return
 
     jumlah_lama = barang_keluar["jumlah"]
-    jumlah_baru = validate_input(f"Masukkan jumlah barang keluar [{jumlah_lama}]: ", r"^[0-9]+$",int) or jumlah_lama
+    jumlah_baru = validate_input(f"Masukkan jumlah barang keluar [{jumlah_lama}]: ", r"^[0-9]+$",int, default=jumlah_lama)
 
     if jumlah_baru > barang["stok"] + jumlah_lama:
         print("\nJumlah barang keluar melebihi stok yang tersedia!\n")
