@@ -61,7 +61,7 @@ def logout(database):
 def register(database):
     print("==== Register Akun ====")
     data_user = database.get('users',[])
-    nama =  validate_input("Masukkan nama: ",r"^[a-zA-Z][^\s]*$",str)
+    nama =  validate_input("Masukkan nama: ",r"^[a-zA-Z0-9\s]+$",str)
     while True:
         username = validate_input("Masukkan username: ",r"^[a-zA-Z][^\s]*$",str)
         used = False

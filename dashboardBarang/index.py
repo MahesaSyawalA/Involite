@@ -56,7 +56,11 @@ def edit_barang(database):
     id_barang = validate_input("Masukkan ID Barang yang ingin diedit: ", r'^[a-zA-Z0-9 ]+$', str)
 
     # Mencari barang berdasarkan ID Barang
-    barang = next((barang for barang in barang_list if barang["idBarang"] == id_barang), None)
+    barang = None
+    for item in barang_list:
+        if item["idBarang"] == id_barang:
+            barang = item
+            break
 
     if barang:
         print(f"\nMengedit barang: {barang['namaBarang']}")
@@ -83,7 +87,11 @@ def hapus_barang(database):
     id_barang =validate_input("Masukkan ID Barang yang ingin dihapus: ", r'^[a-zA-Z0-9 ]+$', str)
 
     # Mencari barang berdasarkan ID Barang
-    barang = next((barang for barang in barang_list if barang["idBarang"] == id_barang), None)
+    barang = None
+    for item in barang_list:
+        if item["idBarang"] == id_barang:
+            barang = item
+            break
 
     if barang:
         database["barang"].remove(barang)
@@ -106,7 +114,7 @@ def main():
         print("4. Hapus Barang")
         print("5. Keluar")
 
-        pilihan = validate_input("Pilihm Menu: ",r"^[0-9]+$",str)
+        pilihan = validate_input("Pilihan Menu: ",r"^[0-9]+$",str,menu=True,maxMenu=5)
 
         if pilihan == "1":
             lihat_barang(database)
@@ -124,5 +132,4 @@ def main():
             break
         else:
             print("\nPilihan tidak valid, silakan coba lagi.\n")
-
 

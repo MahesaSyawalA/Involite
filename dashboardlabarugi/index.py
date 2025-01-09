@@ -116,17 +116,7 @@ def show_accumulated_reports(data):
         print("Belum ada laporan yang diakumulasikan.")
         return
 
-    table_data = []
     for report in data['profitLossReport']:
-        # table_data.append([
-        #     report['idReport'],
-        #     report['tanggalAwal'],
-        #     report['tanggalAkhir'],
-        #     f"Rp{report['totalPemasukan']:,}",
-        #     f"Rp{report['totalPengeluaran']:,}",
-        #     f"Rp{report['totalLabaRugi']:,}",
-        #     report['createdAt']
-        # ])
 
         print(f'ID Laporan : {report['idReport']}')
         print(f'Tanggal Awal : {report['tanggalAwal']}')
@@ -137,7 +127,3 @@ def show_accumulated_reports(data):
         print(f'Created At : {report['createdAt']}')
         print('-'*40)
         
-
-
-    # headers = ["ID Laporan", "Tanggal Awal", "Tanggal Akhir", "Total Pemasukan", "Total Pengeluaran", "Total Laba/Rugi", "Dibuat Pada"]
-    # print(tabulate(table_data, headers=headers, tablefmt="grid"))
