@@ -68,7 +68,7 @@ def edit_barang(database):
         barang['stok'] = validate_input(f"Stok [{barang['stok']}]: ",r"^\d+$",int,default=barang['stok'])
         barang['kategori'] = validate_input(f"Kategori [{barang['kategori']}]: ",r"^[a-zA-Z0-9!@#$%^&*()_+\-=,.?\s]+$",str,default=barang['kategori'])
         harga_jual = validate_input(f"Harga Jual [{barang['hargaJual'] or 'Belum Ditentukan'}]: ",r"^\d+$",int,default=0)
-        barang['hargaJual'] = int(harga_jual) if harga_jual.strip() else barang['hargaJual']
+        barang['hargaJual'] = int(harga_jual) if harga_jual else barang['hargaJual']
         print("\nBarang berhasil diperbarui!\n")
     else:
         print(f"\nBarang dengan ID {id_barang} tidak ditemukan.\n")
