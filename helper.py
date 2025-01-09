@@ -17,6 +17,12 @@ def save_data(data):
     with open("database.json", "w") as file:
         json.dump(data, file, indent=4)
 
+def get_sessions(data):
+    sesi = data.get('sessions',{})
+    if sesi:
+        return sesi 
+    else:
+        return print('sesi belum ada')
 
 def validate_input(prompt, pattern, cast_type=str, default=None, validate_date=False, menu=False, maxMenu=0):
     """Validate user input against a regex pattern and additional checks like date validation."""

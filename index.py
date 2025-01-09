@@ -5,6 +5,7 @@ from barangKeluar.index import main as DashboardBarangKeluar
 from dashboardlabarugi.index import main as DashboardLabaRugi
 from ManajemenAkun.index import main as ManagementAkun
 from ManajemenAkun.index import logout as Logout
+from helper import get_sessions
 # from dataBase.index import rundb  
 
 def load_database():
@@ -27,7 +28,8 @@ if __name__ == "__main__":
     print('Selamat Datang di Aplikasi Involite')
 
     while True:
-        session = database.get('sessions', [])  # Selalu perbarui `session` dari database terbaru
+        session = get_sessions(database)  # Selalu perbarui `session` dari database terbaru
+        print(session)
         if session:
             while session:
                 print('\n1. Logout')
@@ -35,6 +37,7 @@ if __name__ == "__main__":
                 print('3. Dashboard Barang Masuk')
                 print('4. Dashboard Barang Keluar')
                 print('5. Dashboard Laba Rugi')
+                print('6. Dashboard Management Akun dan Usaha')
                 opsi = input('Pilih Menu yang ingin Anda gunakan: ')
                 
                 if opsi == '1':
@@ -50,6 +53,8 @@ if __name__ == "__main__":
                     DashboardBarangKeluar()
                 elif opsi == '5':
                     DashboardLabaRugi()
+                elif opsi == '6':
+                    ManagementAkun()
                 else:
                     print('Masukkan opsi yang tepat.')
         else:

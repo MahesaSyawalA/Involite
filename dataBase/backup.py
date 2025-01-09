@@ -1,22 +1,14 @@
 import json
 
-# Membuat dummy database dengan tambahan 'role' di 'users'
+# Membuat dummy database tanpa 'usaha' dan 'idUsaha'
 data = {
     "users": [
-        {"idUser": "1","idUsaha":'1', "nama": "Alice", "username": "alice123", "password": "password123", "role": "owner", "createdAt": "2024-11-01"},
-        {"idUser": "2","idUsaha":'1', "nama": "Bob", "username": "bob456", "password": "password456", "role": "user", "createdAt": "2024-11-02"}
-    ],'usaha':[
-        {
-        'idUsaha' : '1',
-        'idUser':'1',
-        'namaUsaha' : 'Jual ATK',
-        'contactInfo' : '08122123213',
-         "createdAt": "2024-11-01",
-         }
+        {"idUser": "1", "nama": "Alice", "username": "alice123", "password": "password123", "createdAt": "2024-11-01"},
+        {"idUser": "2", "nama": "Bob", "username": "bob456", "password": "password456", "createdAt": "2024-11-02"}
     ],
     "barang": [
-        {"idBarang": "1", "namaBarang": "Beras", "stok": 100, "kategori": "Sembako", "hargaModal": 15000, "hargaJual": 18000, "createdAt": "2024-11-01"},
-        {"idBarang": "2", "namaBarang": "Minyak Goreng", "stok": 50, "kategori": "Sembako", "hargaModal": 17000, "hargaJual": 20400, "createdAt": "2024-11-01"}
+        {"idBarang": "1", "namaBarang": "Beras", "stok": 100, "kategori": "Sembako", "hargaSatuan": 15000, "createdAt": "2024-11-01"},
+        {"idBarang": "2", "namaBarang": "Minyak Goreng", "stok": 50, "kategori": "Sembako", "hargaSatuan": 17000, "createdAt": "2024-11-01"}
     ],
     "barangMasuk": [
         {"idBarangMasuk": "1", "idBarang": "1", "jumlah": 50, "hargaSatuan": 12000, "totalModal": 600000, "tanggalMasuk": "2024-11-01", "description": "Stok awal"},
@@ -29,10 +21,15 @@ data = {
     "profitLossReport": [
         {"idReport": "1", "tanggalAwal": "2024-11-01", "tanggalAkhir": "2024-11-30", "totalPemasukan": 235000, "totalPengeluaran": 1020000, "totalLabaRugi": -785000, "createdAt": "2024-12-01"}
     ],
-    "sessions": [
-        {"idUsaha":'1',"namaUser": "alice" , 'role':'owner'}
+    'sessions': [
+        {"namaUser":"zahra"}
     ]
 }
+
+# Modifikasi barang: ubah hargaSatuan ke hargaModal, tambahkan hargaJual
+for barang in data['barang']:
+    barang['hargaModal'] = barang.pop('hargaSatuan')  # Ubah hargaSatuan menjadi hargaModal
+    barang['hargaJual'] = barang['hargaModal'] * 1.2  # Tambahkan hargaJual dengan markup 20%
 
 # Menyimpan data ke file JSON
 with open("database.json", "w") as file:
@@ -48,3 +45,4 @@ print(json.dumps(loaded_data, indent=4))
 def rundb():
     with open("database.json", "w") as file:
         json.dump(data, file, indent=4)
+        
