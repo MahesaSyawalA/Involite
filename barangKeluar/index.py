@@ -89,7 +89,11 @@ def update_barang_keluar(database):
 
     # Pilih data yang akan diedit
     id_barang_keluar = validate_input("Masukkan ID Barang Keluar yang ingin diedit: ",r"^[a-zA-Z0-9]+$",str)
-    barang_keluar = next((bk for bk in barang_keluar_list if bk["idBarangKeluar"] == id_barang_keluar), None)
+    barang_keluar = None
+    for bk in barang_keluar_list:
+        if bk["idBarangKeluar"] == id_barang_keluar:
+            barang_keluar = bk
+            break
 
     if not barang_keluar:
         print("\nID Barang Keluar tidak ditemukan.\n")
@@ -100,7 +104,11 @@ def update_barang_keluar(database):
 
     # Edit data barang keluar
     id_barang = input(f"Masukkan ID Barang [{barang_keluar['idBarang']}]: ") or barang_keluar["idBarang"]
-    barang = next((b for b in database.get("barang", []) if b["idBarang"] == id_barang), None)
+    barang = None
+    for b in database.get("barang", []):
+        if b["idBarang"] == id_barang:
+            barang = b
+            break
 
     if not barang:
         print("\nID Barang tidak ditemukan. Silakan coba lagi.\n")
@@ -136,16 +144,24 @@ def update_barang_keluar(database):
 def delete_barang_keluar(database):
     print("==== Hapus Barang Keluar ====")
     show_database(database, 'barangKeluar')
-    id_barang_keluar =validate_input("Masukkan ID Barang Keluar yang ingin dihapus: ",r"^[a-zA-Z0-9]+$",str)
+    id_barang_keluar = validate_input("Masukkan ID Barang Keluar yang ingin dihapus: ",r"^[a-zA-Z0-9]+$",str)
 
     # Cari barang keluar
-    barang_keluar = next((b for b in database["barangKeluar"] if b["idBarangKeluar"] == id_barang_keluar), None)
+    barang_keluar = None
+    for b in database["barangKeluar"]:
+        if b["idBarangKeluar"] == id_barang_keluar:
+            barang_keluar = b
+            break
     if not barang_keluar:
         print("\nBarang keluar dengan ID tersebut tidak ditemukan.\n")
         return
 
     # Kembalikan stok ke jumlah awal
-    barang = next((b for b in database["barang"] if b["idBarang"] == barang_keluar["idBarang"]), None)
+    barang = None
+    for b in database["barang"]:
+        if b["idBarang"] == barang_keluar["idBarang"]:
+            barang = b
+            break
     if barang:
         barang["stok"] += barang_keluar["jumlah"]
 

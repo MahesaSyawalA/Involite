@@ -10,7 +10,10 @@ def generate_id_barang_masuk(data):
     if not data["barangMasuk"]:
         return "BM001"
 
-    existing_ids = [int(item["idBarangMasuk"][2:]) for item in data["barangMasuk"] if re.match(r"^BM\d{3}$", item["idBarangMasuk"])]
+    existing_ids = []
+    for item in data["barangMasuk"]:
+        if re.match(r"^BM\d{3}$", item["idBarangMasuk"]):
+            existing_ids.append(int(item["idBarangMasuk"][2:]))
     new_id_number = max(existing_ids, default=0) + 1
     return f"BM{new_id_number:03d}"
 
